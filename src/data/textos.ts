@@ -17,7 +17,7 @@ export const PERSONAJES = [
 ] as const;
 
 const es = {
-  nav: { proyecto: 'El proyecto', personajes: 'Personajes', capturas: 'Capturas', rpg: 'El RPG', autor: 'El autor', apoyar: 'Apoyar' },
+  nav: { proyecto: 'El proyecto', personajes: 'Personajes', capturas: 'Capturas', boringram: 'Boringram', rpg: 'El RPG', autor: 'El autor', apoyar: 'Apoyar' },
   hero: {
     generos: 'Novela visual · Peleas por turnos · Comedia negra',
     tagline:
@@ -48,10 +48,14 @@ const es = {
       jair: { titulo: 'Modo ahorro de energía', info: 'Treinta años en versión beta y nadie ha reportado el bug. Sin sueldo completo, sin sueño y sin expectativas.' },
       nikki: { titulo: 'Fuera de servicio', info: 'Trabaja en la heladería Dulce Frío. Sin uniforme y sin sonrisa obligatoria: así es cuando nadie le paga por ser amable.' },
       cami: { titulo: 'Piloto sin flota', info: 'Huérfana, rebelde, sin nave y con un tobillo roto. Aun así, la persona más estable de esta historia.' },
-      rikka: { titulo: 'Guardiana del puente (sin sueldo)', info: 'Más de quinientos años cuidando un puente y nadie le ha pagado nunca. Jair siente que por fin encontró a su gente.' },
+      rikka: { titulo: 'Sacerdotisa de la Primavera', info: 'Sacerdotisa y guardiana del puente al reino de la Primavera. Más de quinientos años en el puesto y nadie le ha pagado nunca. Jair siente que por fin encontró a su gente.' },
     } as Record<string, { titulo: string; info: string }>,
   },
-  capturas: { titulo: 'Capturas', cerrar: 'Cerrar', desliza: 'Desliza para ver más →', items: ['El menú de inicio', 'La noche del bar', 'Antes de pelear', 'La pelea', 'Bootcamp Genesis: el instructor', 'Bootcamp Genesis: los cursos', 'Bootcamp Genesis: la inscripción'] },
+  capturas: { titulo: 'Capturas', cerrar: 'Cerrar', desliza: 'Desliza para ver más →', items: ['El menú de inicio', 'La noche del bar', 'Antes de pelear', 'La pelea', 'Un especial: Cañón de blaster', 'El rayo del cañón', 'El barrido del cañón', 'Bootcamp Genesis: el instructor', 'Bootcamp Genesis: una clase', 'Bootcamp Genesis: los cursos', 'Bootcamp Genesis: la inscripción'] },
+  boringram: {
+    texto: ['El celular de Jair. Su red social, sus chats y sus pensamientos avanzan con la historia y siguen la hora del mundo real: mientras él vive días dentro del juego, allá pasan minutos.', 'Dale me gusta, comenta, mira las historias de Nikki o enciende la linterna. Nadie le da me gusta a Jair, pero tú puedes.'],
+    items: ['El inicio', 'La historia de Nikki', 'El perfil de Jair', 'Los chats'],
+  },
   rpg: {
     titulo: 'El RPG',
     texto: [
@@ -59,13 +63,15 @@ const es = {
       'Cada personaje tiene su repertorio, sus especiales y sus estados: confusión, veneno, parálisis. Y los rivales también saben jugar sucio.',
     ],
     tv: 'Prueba los botones del televisor.',
-    mensajes: { turno: '¿Qué hace Jair?', jair: 'Jair usa Puñetazo.', nikki: 'Nikki usa Cachetada.', esquiva: 'Jair esquiva de un salto.', cura: 'Nikki pide otra cerveza y recupera fuerzas.' },
+    mensajes: { turno: '¿Qué hace Jair?', jair: 'Jair usa Puñetazo.', nikki: 'Nikki usa Cachetada.', esquiva: 'Jair esquiva de un salto.', cura: 'Nikki pide otra cerveza y recupera fuerzas.', comandos: ['Atacar', 'Hablar', 'Esquivar', 'Objetos', 'Huir'], desc: 'Elige uno de tus ataques y a quién. Puede fallar: a veces el rival esquiva.' },
   },
   autor: {
     titulo: 'El autor',
     texto: [
-      'PROJECT GENESIS es un proyecto indie hecho por una sola persona: Jorge Andrés Urgilés Ruiz, ingeniero de software. La historia, la dirección, el diseño y la programación salieron de una sola cabeza.',
-      'Nació en octubre de 2026, de noche, después del trabajo, como desahogo. Es, a propósito, una historia sobre un hombre que usa una IA para crear personajes, hecha con ayuda de IA: para programar el motor, redactar borradores y generar el arte, mientras llega el día en que artistas lo redibujen.',
+      'PROJECT GENESIS es un proyecto indie hecho por una sola persona: Jorge Andrés Urgilés Ruiz, ingeniero de software. La historia, la dirección, el diseño y la programación salieron de una sola cabeza. Nació en octubre de 2026, de noche, después del trabajo, como desahogo.',
+      'Lo técnico: la historia vive en datos y el motor en código. Una novela visual y un RPG por turnos que corren en el navegador, sin instalar nada, con un celular que sigue la hora del mundo real y cada ruta y cada final comprobados automáticamente. Desarrollo web llevado hasta donde no debería llegar.',
+      'Lo artístico: una voz antes que una estética. Humor negro que incomoda en vez de premiar, el contraste entre una fantasía brillante y una vida real sudada, y los juegos y la música de los 80, los 90 y los 2000 como forma de hablar de la soledad.',
+      'Lo filosófico: una pregunta de fondo. ¿Qué le debe un creador a lo que creó? Una vida en bucle, como la de Sísifo; criaturas que descubren que su dios es solo un hombre; y la libertad que se teme justo cuando por fin se tiene.',
     ],
     links: { pagina: 'Mi página', github: 'El juego en GitHub', linkedin: 'LinkedIn' },
   },
@@ -84,7 +90,7 @@ const es = {
 };
 
 const en: typeof es = {
-  nav: { proyecto: 'The project', personajes: 'Characters', capturas: 'Screenshots', rpg: 'The RPG', autor: 'The author', apoyar: 'Support' },
+  nav: { proyecto: 'The project', personajes: 'Characters', capturas: 'Screenshots', boringram: 'Boringram', rpg: 'The RPG', autor: 'The author', apoyar: 'Support' },
   hero: {
     generos: 'Visual novel · Turn-based battles · Dark comedy',
     tagline:
@@ -115,10 +121,14 @@ const en: typeof es = {
       jair: { titulo: 'Power-saving mode', info: "Thirty years old, still in beta, and nobody has reported the bug. No full paycheck, no sleep and no expectations." },
       nikki: { titulo: 'Out of service', info: "Works at the Sweet Chill ice cream shop. No uniform and no mandatory smile: this is her when nobody pays her to be nice." },
       cami: { titulo: 'Pilot without a fleet', info: 'Orphan, rebel, no ship and a broken ankle. Still, the most stable person in this story.' },
-      rikka: { titulo: 'Guardian of the bridge (unpaid)', info: "More than five hundred years guarding a bridge and nobody has ever paid her. Jair feels he's finally found his people." },
+      rikka: { titulo: 'Priestess of Spring', info: "Priestess and guardian of the bridge to the kingdom of Spring. More than five hundred years on the job and nobody has ever paid her. Jair feels he's finally found his people." },
     },
   },
-  capturas: { titulo: 'Screenshots', cerrar: 'Close', desliza: 'Swipe to see more →', items: ['The title screen', 'The night at the bar', 'Before the fight', 'The fight', 'Bootcamp Genesis: the instructor', 'Bootcamp Genesis: the courses', 'Bootcamp Genesis: sign-up'] },
+  capturas: { titulo: 'Screenshots', cerrar: 'Close', desliza: 'Swipe to see more →', items: ['The title screen', 'The night at the bar', 'Before the fight', 'The fight', 'A special: Blaster Cannon', 'The cannon beam', 'The cannon sweep', 'Bootcamp Genesis: the instructor', 'Bootcamp Genesis: a class', 'Bootcamp Genesis: the courses', 'Bootcamp Genesis: sign-up'] },
+  boringram: {
+    texto: ["Jair's phone. His social network, chats and thoughts move along with the story and follow real-world time: while he lives days inside the game, only minutes pass out there.", "Like posts, comment, watch Nikki's stories or turn on the flashlight. Nobody likes Jair's posts, but you can."],
+    items: ['The feed', "Nikki's story", "Jair's profile", 'The chats'],
+  },
   rpg: {
     titulo: 'The RPG',
     texto: [
@@ -126,13 +136,15 @@ const en: typeof es = {
       'Every character has their own moves, specials and status effects: confusion, poison, paralysis. And the rivals know how to fight dirty too.',
     ],
     tv: 'Try the TV buttons.',
-    mensajes: { turno: 'What will Jair do?', jair: 'Jair uses Punch.', nikki: 'Nikki uses Slap.', esquiva: 'Jair jumps out of the way.', cura: 'Nikki orders another beer and gets her strength back.' },
+    mensajes: { turno: 'What will Jair do?', jair: 'Jair uses Punch.', nikki: 'Nikki uses Slap.', esquiva: 'Jair jumps out of the way.', cura: 'Nikki orders another beer and gets her strength back.', comandos: ['Attack', 'Talk', 'Dodge', 'Items', 'Run'], desc: 'Pick one of your attacks and a target. It can miss: sometimes the rival dodges.' },
   },
   autor: {
     titulo: 'The author',
     texto: [
-      'PROJECT GENESIS is an indie project made by one person: Jorge Andrés Urgilés Ruiz, software engineer. The story, direction, design and code all came out of a single head.',
-      "It was born in October 2026, at night, after work, as a way to let off steam. On purpose, it's a story about a man who uses an AI to create characters, made with the help of AI: to code the engine, draft texts and generate the art, until the day artists redraw it.",
+      'PROJECT GENESIS is an indie project made by one person: Jorge Andrés Urgilés Ruiz, software engineer. The story, direction, design and code all came out of a single head. It was born in October 2026, at night, after work, as a way to let off steam.',
+      'The technical side: the story lives in data and the engine in code. A visual novel and a turn-based RPG that run in the browser, nothing to install, with a phone that follows real-world time and every route and ending checked automatically. Web development taken where it was never meant to go.',
+      'The artistic side: a voice before a style. Dark humor that makes you uncomfortable instead of rewarding you, the contrast between a shiny fantasy and a sweaty real life, and the games and music of the 80s, 90s and 2000s as a way of talking about loneliness.',
+      'The philosophical side: one question underneath it all. What does a creator owe to what they created? A life on loop, like Sisyphus; creatures who find out their god is just a man; and the freedom you fear right when you finally have it.',
     ],
     links: { pagina: 'My website', github: 'The game on GitHub', linkedin: 'LinkedIn' },
   },

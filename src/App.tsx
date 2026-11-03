@@ -12,7 +12,9 @@ const RPG: Record<string, Hoja & { frames: number; fps: number }> = {
   cami: { src: '/rpg/cami.png', w: 928, h: 118, cuadroW: 116, cuadroH: 118, frames: 8, fps: 8 },
   rikka: { src: '/rpg/rikka.png', w: 792, h: 116, cuadroW: 132, cuadroH: 116, frames: 6, fps: 6 },
 };
-const CAPTURAS = ['menu', 'novela', 'vs', 'pelea', 'bootcamp_intro', 'bootcamp_aula', 'bootcamp_inicio'];
+const CAPTURAS = ['menu', 'novela', 'vs', 'pelea', 'especial_aviso', 'especial_rayo', 'especial_barrido', 'bootcamp_intro', 'bootcamp_clase', 'bootcamp_aula', 'bootcamp_inicio'];
+// Boringram: capturas en vertical, como se ve en un celular.
+const BORINGRAM = ['bor_inicio', 'bor_historia', 'bor_perfil', 'bor_chat'];
 
 function idiomaInicial(): Lang {
   try {
@@ -56,7 +58,7 @@ export function App() {
           <span>PROJECT GENESIS</span>
         </a>
         <nav>
-          {(['proyecto', 'personajes', 'capturas', 'rpg', 'autor', 'apoyar'] as const).map((k) => (
+          {(['proyecto', 'personajes', 'capturas', 'boringram', 'rpg', 'autor', 'apoyar'] as const).map((k) => (
             <a key={k} href={`#${k}`}>
               {t.nav[k]}
             </a>
@@ -146,6 +148,26 @@ export function App() {
           </div>
         </section>
 
+        {/* Boringram, en vertical */}
+        <section id="boringram" className="seccion seccion-bor">
+          <div className="bor-texto">
+            <img className="bor-logo" src="/marca/boringram.webp" alt="Boringram" />
+            {t.boringram.texto.map((p) => (
+              <p key={p} className="seccion-texto">
+                {p}
+              </p>
+            ))}
+          </div>
+          <div className="bor-telefonos">
+            {BORINGRAM.map((b, i) => (
+              <figure key={b} className="bor-telefono">
+                <img src={`/capturas/${b}.jpg`} alt={t.boringram.items[i]} loading="lazy" />
+                <figcaption>{t.boringram.items[i]}</figcaption>
+              </figure>
+            ))}
+          </div>
+        </section>
+
         {/* El RPG, en el televisor */}
         <section id="rpg" className="seccion seccion-rpg">
           <div className="rpg-texto">
@@ -206,7 +228,7 @@ export function App() {
       </main>
 
       <footer className="pie">
-        <img src="/marca/logo_blanco.webp" alt="" />
+        <img src="/marca/logo.webp" alt="PROJECT GENESIS" />
         <p>
           © 2026 · {t.pie} · +18
         </p>

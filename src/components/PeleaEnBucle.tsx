@@ -40,7 +40,9 @@ const espera = (ms: number) => new Promise((r) => setTimeout(r, ms));
  * Una pelea del juego en bucle, hecha con sus sprites y el fondo del bar: Jair y Nikki se turnan para atacar, con
  * el texto de la acción, los números de daño y la vida que baja. Va dentro del televisor de la sección del RPG.
  */
-export function PeleaEnBucle({ mensajes }: { mensajes: { turno: string; jair: string; nikki: string; esquiva: string; cura: string } }) {
+type Mensajes = { turno: string; jair: string; nikki: string; esquiva: string; cura: string; comandos: string[]; desc: string };
+
+export function PeleaEnBucle({ mensajes }: { mensajes: Mensajes }) {
   const caja = useRef<HTMLDivElement>(null);
   const [alto, setAlto] = useState(400);
   const [anim, setAnim] = useState<{ jair: Anim; nikki: Anim }>({ jair: A.jair.idle, nikki: A.nikki.idle });
@@ -48,6 +50,9 @@ export function PeleaEnBucle({ mensajes }: { mensajes: { turno: string; jair: st
   const [x, setX] = useState({ jair: POS.jair.x, nikki: POS.nikki.x });
   const [ps, setPs] = useState({ ...PS });
   const [texto, setTexto] = useState(mensajes.turno);
+  // El menú de comandos: dónde está el cursor y si es el turno de Jair (si no, se ve apagado).
+  const [cursor, setCursor] = useState(0);
+  const [suTurno, setSuTurno] = useState(true);
   const [numero, setNumero] = useState<null | { quien: 'jair' | 'nikki'; t: string; k: number }>(null);
   const textos = useRef(mensajes);
   textos.current = mensajes;
@@ -69,10 +74,19 @@ export function PeleaEnBucle({ mensajes }: { mensajes: { turno: string; jair: st
     };
     (async () => {
       for (let i = 0; vivo; i = (i + 1) % GUION.length) {
-        setTexto(textos.current.turno);
-        await espera(1300);
-        if (!vivo) return;
         const p = GUION[i];
+        setSuTurno(p.quien === 'jair');
+        setTexto(textos.current.turno);
+        // El cursor recorre el menú y vuelve a «Atacar», como alguien que lo piensa.
+        if (p.quien === 'jair') {
+          for (const c of [1, 2, 1, 0]) {
+            await espera(260);
+            setCursor(c);
+          }
+        }
+        await espera(p.quien === 'jair' ? 300 : 1100);
+        if (!vivo) return;
+        setSuTurno(false);
         if (p.tipo === 'cura') {
           setTexto(textos.current.cura);
           setPs({ ...PS });
@@ -130,6 +144,14 @@ export function PeleaEnBucle({ mensajes }: { mensajes: { turno: string; jair: st
         ))}
       </div>
       <div className="pelea-mensaje">{texto}</div>
+      <div className={`pelea-menu ${suTurno ? '' : 'apagado'}`}>
+        {mensajes.comandos.map((c, i) => (
+          <span key={c} className={i === cursor && suTurno ? 'sel' : ''}>
+            {c}
+          </span>
+        ))}
+      </div>
+      <div className="pelea-desc">{mensajes.desc}</div>
       <div className="pelea-tarjeta">
         <b>Jair</b> <small>Nv 5</small>
         <span>
