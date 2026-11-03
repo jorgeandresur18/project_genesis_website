@@ -62,7 +62,7 @@ const es = {
       'Una mala decisión en el bar y la novela se vuelve una pelea por turnos. Atacar, hablar, esquivar, usar objetos… o pedir perdón.',
       'Cada personaje tiene su repertorio, sus especiales y sus estados: confusión, veneno, parálisis. Y los rivales también saben jugar sucio.',
     ],
-    tv: 'Prueba los botones del televisor.',
+    tv: 'Prueba los botones del televisor. Y sí: los cables se desenchufan.',
     mensajes: { turno: '¿Qué hace Jair?', jair: 'Jair usa Puñetazo.', nikki: 'Nikki usa Cachetada.', esquiva: 'Jair esquiva de un salto.', cura: 'Nikki pide otra cerveza y recupera fuerzas.', comandos: ['Atacar', 'Hablar', 'Esquivar', 'Objetos', 'Huir'], desc: 'Elige uno de tus ataques y a quién. Puede fallar: a veces el rival esquiva.' },
   },
   autor: {
@@ -135,7 +135,7 @@ const en: typeof es = {
       'One bad choice at the bar and the novel turns into a turn-based battle. Attack, talk, dodge, use items… or say sorry.',
       'Every character has their own moves, specials and status effects: confusion, poison, paralysis. And the rivals know how to fight dirty too.',
     ],
-    tv: 'Try the TV buttons.',
+    tv: 'Try the TV buttons. And yes: you can unplug the cables.',
     mensajes: { turno: 'What will Jair do?', jair: 'Jair uses Punch.', nikki: 'Nikki uses Slap.', esquiva: 'Jair jumps out of the way.', cura: 'Nikki orders another beer and gets her strength back.', comandos: ['Attack', 'Talk', 'Dodge', 'Items', 'Run'], desc: 'Pick one of your attacks and a target. It can miss: sometimes the rival dodges.' },
   },
   autor: {

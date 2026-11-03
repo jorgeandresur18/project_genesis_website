@@ -251,3 +251,15 @@ a { color: inherit; }
   .bor-telefono { scroll-snap-align: center; }
   .bor-telefono:nth-child(even) { transform: none; }
 }
+
+/* Los cables se sacan con un clic: el enchufe sale de su aro y el cable cuelga más abajo. */
+button.tv-rca { padding: 0; border: none; cursor: pointer; }
+.tv-rca::before, .tv-rca::after { transition: translate 0.25s cubic-bezier(0.3, 1.4, 0.5, 1); }
+.tv-rca.suelto { background: radial-gradient(circle, #050506 0 30%, #2a2a2e 34% 62%, #c9c9cf 64% 78%, #6c6c72 80%); }
+.tv-rca.suelto::before, .tv-rca.suelto::after { translate: -50% 2.8cqw; }
+.tv-sin-video { position: absolute; inset: 0; z-index: 2; background: #000; }
+.tv-osd-audio { top: auto; bottom: 5%; }
+/* El emblema: al tocarlo, un brillo metálico lo recorre. */
+.tv-emblema { position: relative; padding: 0; border: none; background: none; cursor: pointer; }
+.tv-emblema-brillo { position: absolute; inset: 0; pointer-events: none; -webkit-mask: url('/marca/logo_tv.webp') center / contain no-repeat; mask: url('/marca/logo_tv.webp') center / contain no-repeat; background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.95) 50%, transparent 65%) 0 0 / 250% 100% no-repeat; mix-blend-mode: screen; animation: chapa 0.9s ease-out forwards; }
+@keyframes chapa { from { background-position: 150% 0; filter: brightness(1.4); } to { background-position: -60% 0; filter: brightness(1); } }

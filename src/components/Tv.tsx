@@ -14,6 +14,20 @@ export function Tv({ children }: { children: ReactNode }) {
   const [volumen, setVolumen] = useState(0.5);
   const [osd, setOsd] = useState<null | { tipo: 'canal' | 'volumen'; n: number }>({ tipo: 'canal', n: 0 });
   const reloj = useRef<number | undefined>(undefined);
+  // Los cables se desenchufan con un clic. Video: sin imagen (queda AUX). Audio: muestra qué lado se oye.
+  const [cables, setCables] = useState({ video: true, izq: true, der: true });
+  const [brilla, setBrilla] = useState(0);
+  const [aviso, setAviso] = useState<string | null>(null);
+  const tirar = (k: 'video' | 'izq' | 'der') => {
+    const n = { ...cables, [k]: !cables[k] };
+    setCables(n);
+    if (k !== 'video') {
+      setAviso(n.izq && n.der ? 'L · R' : n.izq ? 'L ·  ' : n.der ? '  · R' : 'MUTE');
+      window.clearTimeout(reloj.current);
+      reloj.current = window.setTimeout(() => setAviso(null), 2200);
+    }
+  };
+  const sinVideo = !cables.video && canal === 0;
 
   const mostrar = (o: { tipo: 'canal' | 'volumen'; n: number }) => {
     setOsd(o);
@@ -58,6 +72,9 @@ export function Tv({ children }: { children: ReactNode }) {
       <div className={`tv-pantalla ${prendida ? '' : 'sin-imagen'} ${transicion ?? ''}`}>
         <div className="tv-imagen">{children}</div>
         {prendida && canal > 0 && <span className="tv-nieve" aria-hidden />}
+        {prendida && sinVideo && <span className="tv-sin-video" aria-hidden />}
+        {prendida && sinVideo && !osd && !transicion && <b className="tv-osd">AUX</b>}
+        {prendida && aviso && <b className="tv-osd tv-osd-audio">AUDIO {aviso}</b>}
         {osd && prendida && (
           <div className="tv-osd" aria-live="polite">
             {osd.tipo === 'canal' ? (
@@ -77,19 +94,19 @@ export function Tv({ children }: { children: ReactNode }) {
         <span className="tv-crt" aria-hidden />
       </div>
       <div className="tv-panel">
-        <span className="tv-izquierda" aria-hidden>
+        <span className="tv-izquierda">
           <span className="tv-parlante" />
           {/* Las entradas de video y audio, con sus cables enchufados (por ahí entra el juego), y los audífonos. */}
           <span className="tv-entradas">
             <span className="tv-jack">
               <small>VIDEO</small>
-              <i className="tv-rca amarillo" />
+              <button type="button" className={`tv-rca amarillo ${cables.video ? '' : 'suelto'}`} aria-label="VIDEO" aria-pressed={cables.video} onClick={() => tirar('video')} />
             </span>
             <span className="tv-jack">
               <small>L-AUDIO-R</small>
               <span className="tv-par">
-                <i className="tv-rca blanco" />
-                <i className="tv-rca rojo" />
+                <button type="button" className={`tv-rca blanco ${cables.izq ? '' : 'suelto'}`} aria-label="AUDIO L" aria-pressed={cables.izq} onClick={() => tirar('izq')} />
+                <button type="button" className={`tv-rca rojo ${cables.der ? '' : 'suelto'}`} aria-label="AUDIO R" aria-pressed={cables.der} onClick={() => tirar('der')} />
               </span>
             </span>
             <span className="tv-jack">
@@ -98,7 +115,11 @@ export function Tv({ children }: { children: ReactNode }) {
             </span>
           </span>
         </span>
-        <img className="tv-logo" src="/marca/logo_tv.webp" alt="PROJECT GENESIS" />
+        {/* El emblema: al tocarlo brilla como una chapa de metal. */}
+        <button type="button" className="tv-emblema" aria-label="PROJECT GENESIS" onClick={() => setBrilla((n) => n + 1)}>
+          <img className="tv-logo" src="/marca/logo_tv.webp" alt="" />
+          {brilla > 0 && <i key={brilla} className="tv-emblema-brillo" />}
+        </button>
         <span className="tv-botones">
           <span className="tv-control tv-vol">
             <span className="tv-par">
