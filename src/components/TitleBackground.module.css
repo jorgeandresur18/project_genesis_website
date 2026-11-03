@@ -1,0 +1,115 @@
+/* Fondo espacial del título: negro y plateado. */
+.bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 40%, #16171a 0%, #08080a 55%, #020203 100%);
+  pointer-events: none;
+}
+
+.grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, #ffffff0b 1px, transparent 1px), linear-gradient(#ffffff0b 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse at center, #000 20%, transparent 75%);
+}
+
+.nebula {
+  position: absolute;
+  width: 34rem;
+  height: 34rem;
+  border-radius: 50%;
+  filter: blur(120px);
+  animation: float 14s ease-in-out infinite;
+}
+.nebulaPlata { top: -8rem; left: 12%; background: rgba(220, 224, 232, 0.09); }
+.nebulaAcero { bottom: -10rem; right: 8%; background: rgba(140, 146, 158, 0.12); animation-delay: -7s; }
+/* Bordes más oscuros: encuadra el centro. */
+.vignette { position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 45%, rgba(0, 0, 0, 0.75) 100%); }
+
+.star {
+  position: absolute;
+  border-radius: 50%;
+  background: #e8ebf5;
+  box-shadow: 0 0 4px 1px rgba(232, 235, 245, 0.5);
+  animation: twinkle 3.2s ease-in-out infinite;
+}
+
+
+.comet {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #f2f4f8;
+  box-shadow: 0 0 8px 2px rgba(242, 244, 248, 0.9), 0 0 24px 4px rgba(220, 224, 232, 0.35);
+  opacity: 0;
+}
+.cometAcero { background: #a9aeb8; box-shadow: 0 0 8px 2px #a9aeb8, 0 0 24px 4px rgba(169, 174, 184, 0.3); }
+.cometX { left: -2%; animation: cross-x 9s linear infinite; }
+.cometY { top: -2%; animation: cross-y 11s linear infinite; }
+
+@keyframes twinkle { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes cross-x { 0% { left: -2%; opacity: 0; } 8% { opacity: 1; } 70% { opacity: 1; } 85%, 100% { left: 104%; opacity: 0; } }
+@keyframes cross-y { 0% { top: -2%; opacity: 0; } 8% { opacity: 1; } 70% { opacity: 1; } 85%, 100% { top: 104%; opacity: 0; } }
+
+/* Código Coffee: sube despacio, apenas visible. */
+.code {
+  position: absolute;
+  bottom: -20%;
+  margin: 0;
+  font-family: ui-monospace, Consolas, monospace;
+  line-height: 1.5;
+  color: rgba(200, 206, 216, 0.16);
+  white-space: pre;
+  text-align: left;
+  animation: code-rise linear infinite;
+}
+@keyframes code-rise {
+  0% { transform: translateY(0); opacity: 0; }
+  12% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-120vh); opacity: 0; }
+}
+/* Franja de glitch: casi siempre invisible; cada tanto cruza y desplaza un poco lo que hay detrás. */
+.glitchBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 3px;
+  opacity: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), rgba(120, 220, 255, 0.25), transparent);
+  box-shadow: 0 0 12px rgba(200, 230, 255, 0.35);
+  animation: glitch-bar 7s steps(1) infinite;
+}
+@keyframes glitch-bar {
+  0%, 90%, 100% { opacity: 0; top: 20%; }
+  91% { opacity: 1; top: 34%; height: 2px; }
+  92% { opacity: 0.7; top: 61%; height: 6px; }
+  93% { opacity: 1; top: 47%; height: 1px; }
+  94% { opacity: 0; }
+}
+
+/* Reducir efectos (Opciones) o el sistema pide menos movimiento: todo quieto. */
+.still *,
+.still { animation: none !important; }
+.still .comet, .still .code, .still .glitchBar { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .bg *, .bg { animation: none !important; }
+  .comet, .code, .glitchBar { display: none; }
+}
+/* Los logos que suben (fondo del televisor): chicos, casi transparentes, del mismo modo que el código. */
+.logo { position: absolute; bottom: -12%; width: clamp(5rem, 9vw, 9rem); height: auto; opacity: 0; translate: -50% 0; filter: drop-shadow(0 0 0.6rem rgba(255, 255, 255, 0.15)); animation: logo-rise linear infinite; }
+@keyframes logo-rise {
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: 0.13; }
+  80% { opacity: 0.13; }
+  100% { transform: translateY(-125vh); opacity: 0; }
+}
+.still .logo { animation: none; opacity: 0.08; }
+/* Detrás del televisor: sin la franja de glitch y con los cometas muy tenues, para que no distraigan del juego. */
+.conLogos .glitchBar { display: none; }
+.conLogos .comet { filter: opacity(0.25); }

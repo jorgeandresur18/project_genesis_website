@@ -1,0 +1,228 @@
+import { useEffect, useState, type CSSProperties } from 'react';
+import { TitleBackground } from './components/TitleBackground';
+import { PeleaEnBucle } from './components/PeleaEnBucle';
+import { Sprite, type Hoja } from './components/Sprite';
+import { Tv } from './components/Tv';
+import { DEMO, ENLACES, PAYPAL, PERSONAJES, TEXTOS, type Lang } from './data/textos';
+
+// La animación de reposo de cada uno, recortada de su hoja del juego (public/rpg/<id>.png).
+const RPG: Record<string, Hoja & { frames: number; fps: number }> = {
+  jair: { src: '/rpg/jair.png', w: 792, h: 116, cuadroW: 132, cuadroH: 116, frames: 6, fps: 6 },
+  nikki: { src: '/rpg/nikki.png', w: 3168, h: 116, cuadroW: 132, cuadroH: 116, frames: 24, fps: 12 },
+  cami: { src: '/rpg/cami.png', w: 928, h: 118, cuadroW: 116, cuadroH: 118, frames: 8, fps: 8 },
+  rikka: { src: '/rpg/rikka.png', w: 792, h: 116, cuadroW: 132, cuadroH: 116, frames: 6, fps: 6 },
+};
+const CAPTURAS = ['menu', 'novela', 'vs', 'pelea', 'bootcamp_intro', 'bootcamp_aula', 'bootcamp_inicio'];
+
+function idiomaInicial(): Lang {
+  try {
+    const guardado = localStorage.getItem('pg-lang');
+    if (guardado === 'es' || guardado === 'en') return guardado;
+  } catch {
+    /* sin almacenamiento: se usa el del navegador */
+  }
+  return navigator.language.toLowerCase().startsWith('es') ? 'es' : 'en';
+}
+
+export function App() {
+  const [lang, setLang] = useState<Lang>(idiomaInicial);
+  const [abierta, setAbierta] = useState<number | null>(null);
+  const t = TEXTOS[lang];
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    try {
+      localStorage.setItem('pg-lang', lang);
+    } catch {
+      /* nada */
+    }
+  }, [lang]);
+  useEffect(() => {
+    if (abierta === null) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setAbierta(null);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [abierta]);
+
+  return (
+    <>
+      <div className="fondo">
+        <TitleBackground lang={lang} />
+      </div>
+
+      <header className="nav">
+        <a href="#inicio" className="nav-marca">
+          <img src="/marca/icono-256.png" alt="" />
+          <span>PROJECT GENESIS</span>
+        </a>
+        <nav>
+          {(['proyecto', 'personajes', 'capturas', 'rpg', 'autor', 'apoyar'] as const).map((k) => (
+            <a key={k} href={`#${k}`}>
+              {t.nav[k]}
+            </a>
+          ))}
+        </nav>
+        <button type="button" className="nav-idioma" onClick={() => setLang(lang === 'es' ? 'en' : 'es')}>
+          {t.idioma}
+        </button>
+      </header>
+
+      <main>
+        {/* Portada */}
+        <section id="inicio" className="hero">
+          <img className="hero-logo" src="/marca/logo.webp" alt="PROJECT GENESIS" />
+          <p className="hero-generos">{t.hero.generos}</p>
+          <p className="hero-tagline">{t.hero.tagline}</p>
+          <div className="hero-botones">
+            <a className="boton boton-principal" href={DEMO} target="_blank" rel="noreferrer">
+              ▶ {t.hero.jugar}
+            </a>
+            <a className="boton" href="#proyecto">
+              {t.hero.conocer}
+            </a>
+          </div>
+          <p className="hero-nota">{t.hero.gratis}</p>
+          <p className="hero-aviso">
+            <img src="/marca/emblema_18.webp" alt="+18" /> {t.hero.aviso}
+          </p>
+        </section>
+
+        {/* El proyecto */}
+        <section id="proyecto" className="seccion">
+          <h2>{t.proyecto.titulo}</h2>
+          {t.proyecto.texto.map((p) => (
+            <p key={p} className="seccion-texto">
+              {p}
+            </p>
+          ))}
+          <div className="rasgos">
+            {t.proyecto.rasgos.map((r) => (
+              <article key={r.t} className="rasgo">
+                <h3>{r.t}</h3>
+                <p>{r.d}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        {/* Personajes */}
+        <section id="personajes" className="seccion">
+          <h2>{t.personajes.titulo}</h2>
+          <p className="seccion-texto">{t.personajes.sub}</p>
+          <div className="personajes">
+            {PERSONAJES.map((p) => {
+              const r = RPG[p.id];
+              const f = t.personajes.fichas[p.id];
+              return (
+                <article key={p.id} className="personaje" style={{ '--c': p.color } as CSSProperties}>
+                  <div className="personaje-arte">
+                    <img className="personaje-2d" src={`/sprites/${p.id}.webp`} alt={p.nombre} loading="lazy" />
+                    <Sprite className="personaje-rpg" hoja={r} anim={{ row: 0, frames: r.frames, fps: r.fps }} escala={1.1} />
+                  </div>
+                  <h3>{p.nombre}</h3>
+                  <b>{f.titulo}</b>
+                  <p>{f.info}</p>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Capturas */}
+        <section id="capturas" className="seccion">
+          <h2>{t.capturas.titulo}</h2>
+          <p className="capturas-pista">{t.capturas.desliza}</p>
+          <div className="capturas">
+            {CAPTURAS.map((c, i) => (
+              <button key={c} type="button" className="captura" onClick={() => setAbierta(i)}>
+                {/* En pantallas chicas, la versión tomada en un celular (la interfaz se lee mejor). */}
+                <picture>
+                  <source media="(max-width: 700px)" srcSet={`/capturas/${c}_cel.jpg`} />
+                  <img src={`/capturas/${c}.jpg`} alt={t.capturas.items[i]} loading="lazy" />
+                </picture>
+                <span>{t.capturas.items[i]}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* El RPG, en el televisor */}
+        <section id="rpg" className="seccion seccion-rpg">
+          <div className="rpg-texto">
+            <h2>{t.rpg.titulo}</h2>
+            {t.rpg.texto.map((p) => (
+              <p key={p} className="seccion-texto">
+                {p}
+              </p>
+            ))}
+            <p className="rpg-pista">{t.rpg.tv}</p>
+          </div>
+          <Tv>
+            <PeleaEnBucle mensajes={t.rpg.mensajes} />
+          </Tv>
+        </section>
+
+        {/* El autor */}
+        <section id="autor" className="seccion">
+          <h2>{t.autor.titulo}</h2>
+          {t.autor.texto.map((p) => (
+            <p key={p} className="seccion-texto">
+              {p}
+            </p>
+          ))}
+          <div className="autor-links">
+            <a className="boton" href={ENLACES.pagina} target="_blank" rel="noreferrer">
+              {t.autor.links.pagina}
+            </a>
+            <a className="boton" href={ENLACES.github} target="_blank" rel="noreferrer">
+              {t.autor.links.github}
+            </a>
+            <a className="boton" href={ENLACES.linkedin} target="_blank" rel="noreferrer">
+              {t.autor.links.linkedin}
+            </a>
+          </div>
+        </section>
+
+        {/* Apoyar: Nikki, como en el easter egg del juego */}
+        <section id="apoyar" className="seccion apoyar">
+          <h2>{t.apoyar.titulo}</h2>
+          <div className="apoyar-escena">
+            <img className="apoyar-nikki" src="/sprites/nikki_tierna.webp" alt="Nikki" loading="lazy" />
+            <div className="apoyar-globo">
+              <b>Nikki</b>
+              {t.apoyar.globo.map((l) => (
+                <p key={l}>{l}</p>
+              ))}
+              <a className="boton-paypal" href={PAYPAL} target="_blank" rel="noreferrer">
+                {t.apoyar.donar} <img src="/marca/paypal.webp" alt="PayPal" />
+              </a>
+              <small>{t.apoyar.gracias}</small>
+            </div>
+          </div>
+          <a className="boton boton-principal" href={DEMO} target="_blank" rel="noreferrer">
+            ▶ {t.hero.jugar}
+          </a>
+        </section>
+      </main>
+
+      <footer className="pie">
+        <img src="/marca/logo_blanco.webp" alt="" />
+        <p>
+          © 2026 · {t.pie} · +18
+        </p>
+      </footer>
+
+      {abierta !== null && (
+        <div className="visor" role="dialog" aria-label={t.capturas.items[abierta]} onClick={() => setAbierta(null)}>
+          <picture>
+            <source media="(max-width: 700px)" srcSet={`/capturas/${CAPTURAS[abierta]}_cel.jpg`} />
+            <img src={`/capturas/${CAPTURAS[abierta]}.jpg`} alt={t.capturas.items[abierta]} />
+          </picture>
+          <button type="button" className="boton" onClick={() => setAbierta(null)}>
+            {t.capturas.cerrar}
+          </button>
+        </div>
+      )}
+    </>
+  );
+}
