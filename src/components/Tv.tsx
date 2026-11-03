@@ -14,19 +14,10 @@ export function Tv({ children }: { children: ReactNode }) {
   const [volumen, setVolumen] = useState(0.5);
   const [osd, setOsd] = useState<null | { tipo: 'canal' | 'volumen'; n: number }>({ tipo: 'canal', n: 0 });
   const reloj = useRef<number | undefined>(undefined);
-  // Los cables se desenchufan con un clic. Video: sin imagen (queda AUX). Audio: muestra qué lado se oye.
+  // Los cables se desenchufan con un clic. Video: sin imagen (en un canal no cuenta). Audio: la página no suena.
   const [cables, setCables] = useState({ video: true, izq: true, der: true });
   const [brilla, setBrilla] = useState(0);
-  const [aviso, setAviso] = useState<string | null>(null);
-  const tirar = (k: 'video' | 'izq' | 'der') => {
-    const n = { ...cables, [k]: !cables[k] };
-    setCables(n);
-    if (k !== 'video') {
-      setAviso(n.izq && n.der ? 'L · R' : n.izq ? 'L ·  ' : n.der ? '  · R' : 'MUTE');
-      window.clearTimeout(reloj.current);
-      reloj.current = window.setTimeout(() => setAviso(null), 2200);
-    }
-  };
+  const tirar = (k: 'video' | 'izq' | 'der') => setCables((c) => ({ ...c, [k]: !c[k] }));
   const sinVideo = !cables.video && canal === 0;
 
   const mostrar = (o: { tipo: 'canal' | 'volumen'; n: number }) => {
@@ -73,8 +64,6 @@ export function Tv({ children }: { children: ReactNode }) {
         <div className="tv-imagen">{children}</div>
         {prendida && canal > 0 && <span className="tv-nieve" aria-hidden />}
         {prendida && sinVideo && <span className="tv-sin-video" aria-hidden />}
-        {prendida && sinVideo && !osd && !transicion && <b className="tv-osd">AUX</b>}
-        {prendida && aviso && <b className="tv-osd tv-osd-audio">AUDIO {aviso}</b>}
         {osd && prendida && (
           <div className="tv-osd" aria-live="polite">
             {osd.tipo === 'canal' ? (
