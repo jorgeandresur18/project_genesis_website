@@ -60,6 +60,10 @@ export function Tv({ children }: { children: ReactNode }) {
 
   return (
     <div className="tv">
+      {/* En el celular no hay televisor, como en el juego: la pantalla en 4:3 con el efecto y franjas con el logo. */}
+      <span className="tv-franja" aria-hidden>
+        <img src="/marca/logo_tv.webp" alt="" />
+      </span>
       <div className={`tv-pantalla ${prendida ? '' : 'sin-imagen'} ${transicion ?? ''}`}>
         <div className="tv-imagen">{children}</div>
         {prendida && canal > 0 && <span className="tv-nieve" aria-hidden />}
@@ -82,6 +86,9 @@ export function Tv({ children }: { children: ReactNode }) {
         )}
         <span className="tv-crt" aria-hidden />
       </div>
+      <span className="tv-franja" aria-hidden>
+        <img src="/marca/logo_tv.webp" alt="" />
+      </span>
       <div className="tv-panel">
         <span className="tv-izquierda">
           <span className="tv-parlante" />

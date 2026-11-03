@@ -302,3 +302,18 @@ button.tv-rca { padding: 0; border: none; cursor: pointer; }
   .solo-cel { display: block; }
   .rpg-pista { display: none; }
 }
+
+/* El televisor en el celular: como el modo Retro CRT del juego en el celular, sin televisor. La pantalla en 4:3 con
+   el efecto de tubo y, a los costados, franjas oscuras con el logo flotando. Sin botones ni letreros. */
+.tv-franja { display: none; }
+@media (max-width: 700px) {
+  .tv { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); aspect-ratio: 2 / 1; padding: 0; overflow: hidden; border-radius: 0.6rem; background: radial-gradient(ellipse at 50% 50%, #12121a, #050507 75%); box-shadow: 0 0 0 1px var(--borde), 0 1.2rem 2rem rgba(0, 0, 0, 0.6); }
+  .tv-pantalla { grid-column: 2; grid-row: 1; height: 100%; width: auto; border-radius: 0; box-shadow: none; }
+  .tv-panel, .tv-osd { display: none; }
+  .tv-franja { display: grid; place-items: center; grid-row: 1; padding: 0 8%; }
+  .tv-franja:first-child { grid-column: 1; }
+  .tv-franja:last-child { grid-column: 3; }
+  .tv-franja img { width: 100%; filter: drop-shadow(0 0 0.5rem rgba(140, 160, 255, 0.35)); animation: flota 6s ease-in-out infinite; }
+  .tv-franja:last-child img { animation-delay: -3s; }
+}
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) { .tv-franja img { animation: none; } }
