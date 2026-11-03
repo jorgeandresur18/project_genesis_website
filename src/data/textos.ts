@@ -17,7 +17,7 @@ export const PERSONAJES = [
 ] as const;
 
 const es = {
-  nav: { proyecto: 'El proyecto', personajes: 'Personajes', capturas: 'Capturas', boringram: 'Boringram', rpg: 'El RPG', autor: 'El autor', apoyar: 'Apoyar' },
+  nav: { proyecto: 'El proyecto', personajes: 'Personajes', capturas: 'Capturas', boringram: 'Boringram', bootcamp: 'Bootcamp', rpg: 'El RPG', autor: 'El autor', apoyar: 'Apoyar' },
   hero: {
     generos: 'Novela visual · Peleas por turnos · Comedia negra',
     tagline:
@@ -51,10 +51,29 @@ const es = {
       rikka: { titulo: 'Sacerdotisa de la Primavera', info: 'Sacerdotisa y guardiana del puente al reino de la Primavera. Más de quinientos años en el puesto y nadie le ha pagado nunca. Jair siente que por fin encontró a su gente.' },
     } as Record<string, { titulo: string; info: string }>,
   },
-  capturas: { titulo: 'Capturas', cerrar: 'Cerrar', desliza: 'Desliza para ver más →', items: ['El menú de inicio', 'La noche del bar', 'Antes de pelear', 'La pelea', 'Un especial: Cañón de blaster', 'El rayo del cañón', 'El barrido del cañón', 'Bootcamp Genesis: el instructor', 'Bootcamp Genesis: una clase', 'Bootcamp Genesis: los cursos', 'Bootcamp Genesis: la inscripción'] },
+  capturas: { titulo: 'Capturas', cerrar: 'Cerrar', desliza: 'Desliza para ver más →', items: ['El menú de inicio', 'La noche del bar', 'Antes de pelear', 'La pelea', 'Un especial: Cañón de blaster', 'El rayo del cañón', 'El barrido del cañón', 'Modo Retro CRT: la novela en el televisor del cuarto de Jair'] },
   boringram: {
     texto: ['El celular de Jair. Su red social, sus chats y sus pensamientos avanzan con la historia y siguen la hora del mundo real: mientras él vive días dentro del juego, allá pasan minutos.', 'Dale me gusta, comenta, mira las historias de Nikki o enciende la linterna. Nadie le da me gusta a Jair, pero tú puedes.'],
     items: ['El inicio', 'La historia de Nikki', 'El perfil de Jair', 'Los chats'],
+  },
+  bootcamp: {
+    texto: [
+      'Un extra dentro del juego: una parodia de los bootcamps de programación. Entras sin saber nada y sales como «desarrollador explotado, con sobrepeso y propenso a diabetes tipo 2».',
+      'Jair es el instructor y enseña Coffee, el lenguaje de GENESIS (un JavaScript con otro nombre). Cada clase tiene una charla en el aula, un ejercicio en el IDE, con huecos que llenar y una terminal que se burla de ti, y estrellas según cuántas veces no compiló. Los ejercicios son de verdad: lo que aprendes sirve fuera del juego.',
+      'Rikka explica con metáforas de su reino, Nikki pone el humor negro y la crítica laboral, y Cami… Cami no se calla. GENESIS tiene su botón en el IDE, pero se quedó sin tokens haciendo este bootcamp.',
+      'Cada nivel se abre al terminar el capítulo de la historia que le toca y acaba con un diploma con tu nombre, sin validez académica, legal ni emocional, que puedes descargar y compartir.',
+    ],
+    jugar: 'Ya está en la demo: termina el Capítulo 1 y entra desde el botón <Bootcamp> Genesis del menú principal. El nivel Trainee te espera.',
+    nivelesTitulo: 'Los niveles',
+    niveles: [
+      { n: 'Trainee', d: '9 clases: variables, funciones, bucles, listas, objetos y tu primer bug ajeno.', e: 'Disponible en la demo' },
+      { n: 'Junior', d: 'Clases, herencia y async. Responsabilidades de senior, sueldo de trainee. Se abre con el Capítulo 2.', e: 'Próximamente' },
+      { n: 'Semi-senior', d: 'Estructuras de datos y algoritmos. Se abre con el Capítulo 3.', e: 'Próximamente' },
+      { n: 'Senior', d: 'Frameworks y arquitectura. Se abre con el Capítulo 4.', e: 'Próximamente' },
+      { n: 'Desarrollador explotado', d: 'La graduación. Con foto. Se abre con el Capítulo 5.', e: 'Próximamente' },
+    ],
+    aviso: 'Ojo: las clases traen chistes subidos de tono. Dobles sentidos, groserías y bromas sobre el cuerpo (casi siempre de Cami, y casi siempre sobre el trasero de Rikka). Nada explícito, pero mejor no lo abras en la oficina… aunque la oficina sea justo de lo que se burla.',
+    items: ['El instructor, con el sueldo atrasado', 'La inscripción: tu nombre, para el diploma', 'Los niveles: de Trainee a explotado', 'Clase 1: Jair y la pizarra', 'Clase 1: variables (y dobles sentidos)', 'Clase 3: condicionales, según Cami', 'Clase 7: listas, según Nikki', 'El IDE: no compila', 'GENESIS, sin tokens'],
   },
   rpg: {
     titulo: 'El RPG',
@@ -86,11 +105,12 @@ const es = {
     gracias: 'Lo que sea ayuda. Y si no, juégalo y cuéntaselo a alguien: eso también.',
   },
   pie: 'Un juego de Jorge Andrés Urgilés Ruiz.',
+  arriba: 'Volver arriba',
   idioma: 'EN',
 };
 
 const en: typeof es = {
-  nav: { proyecto: 'The project', personajes: 'Characters', capturas: 'Screenshots', boringram: 'Boringram', rpg: 'The RPG', autor: 'The author', apoyar: 'Support' },
+  nav: { proyecto: 'The project', personajes: 'Characters', capturas: 'Screenshots', boringram: 'Boringram', bootcamp: 'Bootcamp', rpg: 'The RPG', autor: 'The author', apoyar: 'Support' },
   hero: {
     generos: 'Visual novel · Turn-based battles · Dark comedy',
     tagline:
@@ -124,10 +144,29 @@ const en: typeof es = {
       rikka: { titulo: 'Priestess of Spring', info: "Priestess and guardian of the bridge to the kingdom of Spring. More than five hundred years on the job and nobody has ever paid her. Jair feels he's finally found his people." },
     },
   },
-  capturas: { titulo: 'Screenshots', cerrar: 'Close', desliza: 'Swipe to see more →', items: ['The title screen', 'The night at the bar', 'Before the fight', 'The fight', 'A special: Blaster Cannon', 'The cannon beam', 'The cannon sweep', 'Bootcamp Genesis: the instructor', 'Bootcamp Genesis: a class', 'Bootcamp Genesis: the courses', 'Bootcamp Genesis: sign-up'] },
+  capturas: { titulo: 'Screenshots', cerrar: 'Close', desliza: 'Swipe to see more →', items: ['The title screen', 'The night at the bar', 'Before the fight', 'The fight', 'A special: Blaster Cannon', 'The cannon beam', 'The cannon sweep', "Retro CRT mode: the novel on the TV in Jair's room"] },
   boringram: {
     texto: ["Jair's phone. His social network, chats and thoughts move along with the story and follow real-world time: while he lives days inside the game, only minutes pass out there.", "Like posts, comment, watch Nikki's stories or turn on the flashlight. Nobody likes Jair's posts, but you can."],
     items: ['The feed', "Nikki's story", "Jair's profile", 'The chats'],
+  },
+  bootcamp: {
+    texto: [
+      "An extra inside the game: a parody of coding bootcamps. You go in knowing nothing and come out as an “overworked developer, overweight and prone to type 2 diabetes.”",
+      "Jair is the instructor and teaches Coffee, the language of GENESIS (JavaScript under another name). Every class has a talk in the classroom, an exercise in the IDE, with blanks to fill and a terminal that makes fun of you, and stars based on how many times it didn't compile. The exercises are real: what you learn works outside the game.",
+      "Rikka explains with metaphors from her kingdom, Nikki brings the dark humor and the jabs at work life, and Cami… Cami won't shut up. GENESIS has its own button in the IDE, but it ran out of tokens making this bootcamp.",
+      'Each level unlocks when you finish its chapter of the story and ends with a diploma with your name on it, with no academic, legal or emotional value, that you can download and share.',
+    ],
+    jugar: "It's already in the demo: finish Chapter 1 and open it from the <Bootcamp> Genesis button on the main menu. The Trainee level is waiting.",
+    nivelesTitulo: 'The levels',
+    niveles: [
+      { n: 'Trainee', d: '9 classes: variables, functions, loops, lists, objects and your first inherited bug.', e: 'Available in the demo' },
+      { n: 'Junior', d: 'Classes, inheritance and async. Senior responsibilities, trainee salary. Unlocks with Chapter 2.', e: 'Coming soon' },
+      { n: 'Semi-senior', d: 'Data structures and algorithms. Unlocks with Chapter 3.', e: 'Coming soon' },
+      { n: 'Senior', d: 'Frameworks and architecture. Unlocks with Chapter 4.', e: 'Coming soon' },
+      { n: 'Overworked developer', d: 'Graduation. With a photo. Unlocks with Chapter 5.', e: 'Coming soon' },
+    ],
+    aviso: "Heads up: the classes come with raunchy jokes. Double meanings, swearing and jokes about bodies (mostly from Cami, and mostly about Rikka's butt). Nothing explicit, but maybe don't open it at the office… even if the office is exactly what it makes fun of.",
+    items: ['The instructor, with his overdue paycheck', 'Sign-up: your name, for the diploma', 'The levels: from Trainee to overworked', 'Class 1: Jair at the whiteboard', 'Class 1: variables (and double meanings)', "Class 3: conditionals, according to Cami", "Class 7: lists, according to Nikki", "The IDE: it doesn't compile", 'GENESIS, out of tokens'],
   },
   rpg: {
     titulo: 'The RPG',
@@ -159,6 +198,7 @@ const en: typeof es = {
     gracias: "Anything helps. And if not, play it and tell someone about it: that helps too.",
   },
   pie: 'A game by Jorge Andrés Urgilés Ruiz.',
+  arriba: 'Back to top',
   idioma: 'ES',
 };
 

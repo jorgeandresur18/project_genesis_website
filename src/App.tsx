@@ -12,7 +12,11 @@ const RPG: Record<string, Hoja & { frames: number; fps: number }> = {
   cami: { src: '/rpg/cami.png', w: 928, h: 118, cuadroW: 116, cuadroH: 118, frames: 8, fps: 8 },
   rikka: { src: '/rpg/rikka.png', w: 792, h: 116, cuadroW: 132, cuadroH: 116, frames: 6, fps: 6 },
 };
-const CAPTURAS = ['menu', 'novela', 'vs', 'pelea', 'especial_aviso', 'especial_rayo', 'especial_barrido', 'bootcamp_intro', 'bootcamp_clase', 'bootcamp_aula', 'bootcamp_inicio'];
+const CAPTURAS = ['menu', 'novela', 'vs', 'pelea', 'especial_aviso', 'especial_rayo', 'especial_barrido', 'crt'];
+// Bootcamp Genesis: el instructor, la inscripción, los niveles, una clase de Jair, tres charlas (Cami y Nikki), el IDE y GENESIS.
+const BOOTCAMP = ['bootcamp_intro', 'bootcamp_inicio', 'bootcamp_niveles', 'bootcamp_clase', 'bootcamp_rikka', 'bootcamp_cami', 'bootcamp_nikki', 'bootcamp_ide', 'bootcamp_genesis'];
+// El color de dificultad de cada nivel, como en el juego: del verde al rojo.
+const NIVEL_COLOR = ['#3ddc84', '#b6e34a', '#ffd23f', '#ff9a3c', '#ff4d5e'];
 // Boringram: capturas en vertical, como se ve en un celular.
 const BORINGRAM = ['bor_inicio', 'bor_historia', 'bor_perfil', 'bor_chat'];
 
@@ -28,7 +32,15 @@ function idiomaInicial(): Lang {
 
 export function App() {
   const [lang, setLang] = useState<Lang>(idiomaInicial);
-  const [abierta, setAbierta] = useState<number | null>(null);
+  const [abierta, setAbierta] = useState<{ c: string; alt: string } | null>(null);
+  // El botón para volver arriba aparece cuando ya se bajó más de una pantalla.
+  const [abajo, setAbajo] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setAbajo(window.scrollY > window.innerHeight);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   const t = TEXTOS[lang];
 
   useEffect(() => {
@@ -58,7 +70,7 @@ export function App() {
           <span>PROJECT GENESIS</span>
         </a>
         <nav>
-          {(['proyecto', 'personajes', 'capturas', 'boringram', 'rpg', 'autor', 'apoyar'] as const).map((k) => (
+          {(['proyecto', 'personajes', 'capturas', 'boringram', 'bootcamp', 'rpg', 'autor', 'apoyar'] as const).map((k) => (
             <a key={k} href={`#${k}`}>
               {t.nav[k]}
             </a>
@@ -136,7 +148,7 @@ export function App() {
           <p className="capturas-pista">{t.capturas.desliza}</p>
           <div className="capturas">
             {CAPTURAS.map((c, i) => (
-              <button key={c} type="button" className="captura" onClick={() => setAbierta(i)}>
+              <button key={c} type="button" className="captura" onClick={() => setAbierta({ c, alt: t.capturas.items[i] })}>
                 {/* En pantallas chicas, la versión tomada en un celular (la interfaz se lee mejor). */}
                 <picture>
                   <source media="(max-width: 700px)" srcSet={`/capturas/${c}_cel.jpg`} />
@@ -164,6 +176,53 @@ export function App() {
                 <img src={`/capturas/${b}.jpg`} alt={t.boringram.items[i]} loading="lazy" />
                 <figcaption>{t.boringram.items[i]}</figcaption>
               </figure>
+            ))}
+          </div>
+        </section>
+
+        {/* Bootcamp Genesis */}
+        <section id="bootcamp" className="seccion">
+          <div className="bc">
+            <div>
+              <img className="bc-logo" src="/marca/bootcamp_logo.webp" alt="Bootcamp Genesis" />
+              {t.bootcamp.texto.map((p) => (
+                <p key={p} className="seccion-texto">
+                  {p}
+                </p>
+              ))}
+              <p className="seccion-texto bc-jugar">{t.bootcamp.jugar}</p>
+              <a className="boton boton-principal" href={DEMO} target="_blank" rel="noreferrer">
+                ▶ {t.hero.jugar}
+              </a>
+            </div>
+            <div>
+              <h3 className="bc-niveles-titulo">{t.bootcamp.nivelesTitulo}</h3>
+              <ol className="bc-niveles">
+                {t.bootcamp.niveles.map((n, i) => (
+                  <li key={n.n} className={i === 0 ? 'abierto' : 'cerrado'} style={{ '--c': NIVEL_COLOR[i] } as CSSProperties}>
+                    <small>
+                      {lang === 'es' ? 'Nivel' : 'Level'} {i + 1} <em>{i === 0 ? '▶' : '🔒'} {n.e}</em>
+                    </small>
+                    <b>{n.n}</b>
+                    <span>{n.d}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+          <p className="hero-aviso bc-aviso">
+            <img src="/marca/emblema_18.webp" alt="+18" /> {t.bootcamp.aviso}
+          </p>
+          <p className="capturas-pista">{t.capturas.desliza}</p>
+          <div className="capturas bc-capturas">
+            {BOOTCAMP.map((c, i) => (
+              <button key={c} type="button" className="captura" onClick={() => setAbierta({ c, alt: t.bootcamp.items[i] })}>
+                <picture>
+                  <source media="(max-width: 700px)" srcSet={`/capturas/${c}_cel.jpg`} />
+                  <img src={`/capturas/${c}.jpg`} alt={t.bootcamp.items[i]} loading="lazy" />
+                </picture>
+                <span>{t.bootcamp.items[i]}</span>
+              </button>
             ))}
           </div>
         </section>
@@ -234,11 +293,15 @@ export function App() {
         </p>
       </footer>
 
+      <a href="#inicio" className={`arriba ${abajo ? 'visible' : ''}`} aria-label={t.arriba} title={t.arriba} tabIndex={abajo ? 0 : -1}>
+        ↑
+      </a>
+
       {abierta !== null && (
-        <div className="visor" role="dialog" aria-label={t.capturas.items[abierta]} onClick={() => setAbierta(null)}>
+        <div className="visor" role="dialog" aria-label={abierta.alt} onClick={() => setAbierta(null)}>
           <picture>
-            <source media="(max-width: 700px)" srcSet={`/capturas/${CAPTURAS[abierta]}_cel.jpg`} />
-            <img src={`/capturas/${CAPTURAS[abierta]}.jpg`} alt={t.capturas.items[abierta]} />
+            <source media="(max-width: 700px)" srcSet={`/capturas/${abierta.c}_cel.jpg`} />
+            <img src={`/capturas/${abierta.c}.jpg`} alt={abierta.alt} />
           </picture>
           <button type="button" className="boton" onClick={() => setAbierta(null)}>
             {t.capturas.cerrar}
