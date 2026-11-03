@@ -20,6 +20,9 @@ const NIVEL_COLOR = ['#3ddc84', '#b6e34a', '#ffd23f', '#ff9a3c', '#ff4d5e'];
 // Boringram: capturas en vertical, como se ve en un celular.
 const BORINGRAM = ['bor_inicio', 'bor_historia', 'bor_perfil', 'bor_chat'];
 
+// Lo mismo que el corte de las capturas tomadas en un celular (max-width: 700px).
+const celular = () => window.matchMedia('(max-width: 700px)').matches;
+
 function idiomaInicial(): Lang {
   try {
     const guardado = localStorage.getItem('pg-lang');
@@ -113,7 +116,14 @@ export function App() {
             {t.proyecto.rasgos.map((r) => (
               <article key={r.t} className="rasgo">
                 <h3>{r.t}</h3>
-                <p>{r.d}</p>
+                {'dCel' in r ? (
+                  <>
+                    <p className="solo-pc">{r.d}</p>
+                    <p className="solo-cel">{r.dCel}</p>
+                  </>
+                ) : (
+                  <p>{r.d}</p>
+                )}
               </article>
             ))}
           </div>
@@ -148,13 +158,20 @@ export function App() {
           <p className="capturas-pista">{t.capturas.desliza}</p>
           <div className="capturas">
             {CAPTURAS.map((c, i) => (
-              <button key={c} type="button" className="captura" onClick={() => setAbierta({ c, alt: t.capturas.items[i] })}>
+              <button key={c} type="button" className="captura" onClick={() => setAbierta({ c, alt: celular() ? (t.capturas.itemsCel[c] ?? t.capturas.items[i]) : t.capturas.items[i] })}>
                 {/* En pantallas chicas, la versión tomada en un celular (la interfaz se lee mejor). */}
                 <picture>
                   <source media="(max-width: 700px)" srcSet={`/capturas/${c}_cel.jpg`} />
                   <img src={`/capturas/${c}.jpg`} alt={t.capturas.items[i]} loading="lazy" />
                 </picture>
-                <span>{t.capturas.items[i]}</span>
+                {t.capturas.itemsCel[c] ? (
+                  <>
+                    <span className="solo-pc">{t.capturas.items[i]}</span>
+                    <span className="solo-cel">{t.capturas.itemsCel[c]}</span>
+                  </>
+                ) : (
+                  <span>{t.capturas.items[i]}</span>
+                )}
               </button>
             ))}
           </div>
