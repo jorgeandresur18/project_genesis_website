@@ -106,8 +106,10 @@ function Arquitectura({ d }: { d: T['bloques']['arquitectura']['diagrama'] }) {
 }
 
 // ---------- Diagrama 2: el mapa del Capítulo 1 ----------
+// En dos mitades, una al lado de la otra: lo que pasa en el mundo real y lo que pasa dentro del juego.
+// En el celular van una debajo de la otra (cada mitad es su propio dibujo, así no se achica).
 type Nodo = { k: keyof T['bloques']['mapa']['nodos']; tipo?: 'decision' | 'pelea' | 'fin'; salida?: { k: keyof T['bloques']['mapa']['salidas']; tipo: 'temprano' | 'bad'; pelea?: boolean } };
-const ESPINA: Nodo[] = [
+const MUNDO: Nodo[] = [
   { k: 'oficina' },
   { k: 'heladeria' },
   { k: 'cerveza', tipo: 'decision', salida: { k: 'sinBar', tipo: 'temprano' } },
@@ -115,6 +117,8 @@ const ESPINA: Nodo[] = [
   { k: 'beso', tipo: 'decision', salida: { k: 'rechazo', tipo: 'temprano' } },
   { k: 'casa' },
   { k: 'correo', tipo: 'decision', salida: { k: 'correo', tipo: 'temprano' } },
+];
+const JUEGO: Nodo[] = [
   { k: 'juego' },
   { k: 'cami' },
   { k: 'bastion', tipo: 'pelea' },
@@ -124,76 +128,93 @@ const ESPINA: Nodo[] = [
   { k: 'fin', tipo: 'fin' },
 ];
 const PASO = 54;
-const X = 210;
+const X = 196;
+const ARRIBA = 64;
+const ANCHO = 600;
+const yDe = (i: number) => ARRIBA + i * PASO;
+
+function Mitad({ m, nodos, n, titulo, children }: { m: T['bloques']['mapa']; nodos: Nodo[]; n: number; titulo: string; children?: ReactNode }) {
+  const alto = yDe(nodos.length - 1) + 30;
+  return (
+    <svg viewBox={`0 0 ${ANCHO} ${alto}`} role="img" aria-label={`${m.t}: ${titulo}`}>
+      <text x="16" y="26" className="cb-svg-mitad">
+        <tspan className="cb-svg-mitad-n">{n}</tspan> {titulo}
+      </text>
+      <line x1={X} y1={yDe(0)} x2={X} y2={yDe(nodos.length - 1)} stroke="#3a3a46" strokeWidth="2" />
+      {nodos.map((nodo, i) => {
+        const y = yDe(i);
+        const salida = nodo.salida;
+        return (
+          <g key={nodo.k}>
+            {salida && (
+              <g>
+                <path d={`M${X + 20} ${y} H${X + 100}`} stroke={salida.tipo === 'bad' ? '#ff4d5e' : '#7a7a86'} strokeWidth="1.6" strokeDasharray="4 4" />
+                <rect x={X + 100} y={y - 14} width="230" height="28" rx="14" fill={salida.tipo === 'bad' ? '#2a0c12' : '#15151b'} stroke={salida.tipo === 'bad' ? '#ff4d5e' : '#5a5a66'} />
+                <text x={X + 215} y={y + 5} textAnchor="middle" className="cb-svg-salida" fill={salida.tipo === 'bad' ? '#ff9aa6' : '#b4b4be'}>
+                  {m.salidas[salida.k]}
+                </text>
+              </g>
+            )}
+            {nodo.tipo === 'decision' ? (
+              <rect x={X - 11} y={y - 11} width="22" height="22" transform={`rotate(45 ${X} ${y})`} fill="#ff6fa5" />
+            ) : nodo.tipo === 'pelea' ? (
+              <rect x={X - 12} y={y - 12} width="24" height="24" rx="5" fill="#0e0e13" stroke="#f0b54a" strokeWidth="2.5" />
+            ) : nodo.tipo === 'fin' ? (
+              <rect x={X - 10} y={y - 10} width="20" height="20" fill="#d9dde4" />
+            ) : (
+              <circle cx={X} cy={y} r="7" fill="#0e0e13" stroke="#d9dde4" strokeWidth="2" />
+            )}
+            <text x={X - 26} y={y + 5} textAnchor="end" className={`cb-svg-nodo ${nodo.tipo === 'decision' ? 'es-decision' : ''}`}>
+              {m.nodos[nodo.k]}
+            </text>
+          </g>
+        );
+      })}
+      {children}
+    </svg>
+  );
+}
 
 function Mapa({ m }: { m: T['bloques']['mapa'] }) {
-  const alto = ESPINA.length * PASO + 20;
-  const yDe = (i: number) => 30 + i * PASO;
-  const iBeso = ESPINA.findIndex((n) => n.k === 'beso');
-  const iJuego = ESPINA.findIndex((n) => n.k === 'juego');
-  const iInvierno = ESPINA.findIndex((n) => n.k === 'invierno');
+  const iBeso = MUNDO.findIndex((n) => n.k === 'beso');
+  const iInvierno = JUEGO.findIndex((n) => n.k === 'invierno');
+  const yb = yDe(iBeso);
   return (
     <div className="cb-diagrama cb-mapa">
-      <svg viewBox={`0 0 620 ${alto}`} role="img" aria-label={m.t}>
-        <line x1={X} y1={yDe(0)} x2={X} y2={yDe(ESPINA.length - 1)} stroke="#3a3a46" strokeWidth="2" />
-        {ESPINA.map((n, i) => {
-          const y = yDe(i);
-          const salida = n.salida;
-          return (
-            <g key={n.k}>
-              {salida && (
-                <g>
-                  <path d={`M${X + 20} ${y} H${X + 120}`} stroke={salida.tipo === 'bad' ? '#ff4d5e' : '#7a7a86'} strokeWidth="1.6" strokeDasharray="4 4" />
-                  <rect x={X + 120} y={y - 14} width="220" height="28" rx="14" fill={salida.tipo === 'bad' ? '#2a0c12' : '#15151b'} stroke={salida.tipo === 'bad' ? '#ff4d5e' : '#5a5a66'} />
-                  <text x={X + 230} y={y + 5} textAnchor="middle" className="cb-svg-salida" fill={salida.tipo === 'bad' ? '#ff9aa6' : '#b4b4be'}>
-                    {m.salidas[salida.k]}
-                  </text>
-                </g>
-              )}
-              {n.tipo === 'decision' ? (
-                <rect x={X - 11} y={y - 11} width="22" height="22" transform={`rotate(45 ${X} ${y})`} fill="#ff6fa5" />
-              ) : n.tipo === 'pelea' ? (
-                <rect x={X - 12} y={y - 12} width="24" height="24" rx="5" fill="#0e0e13" stroke="#f0b54a" strokeWidth="2.5" />
-              ) : n.tipo === 'fin' ? (
-                <rect x={X - 10} y={y - 10} width="20" height="20" fill="#d9dde4" />
-              ) : (
-                <circle cx={X} cy={y} r="7" fill="#0e0e13" stroke="#d9dde4" strokeWidth="2" />
-              )}
-              <text x={X - 26} y={y + 5} textAnchor="end" className={`cb-svg-nodo ${n.tipo === 'decision' ? 'es-decision' : ''}`}>
-                {m.nodos[n.k]}
-              </text>
-            </g>
-          );
-        })}
-        {/* El beso: propasarse lleva a la pelea con Nikki, y perderla, a un bad end. */}
-        <g>
-          <path d={`M${X + 10} ${yDe(iBeso) + 8} C ${X + 60} ${yDe(iBeso) + 30}, ${X + 70} ${yDe(iBeso) + 40}, ${X + 120} ${yDe(iBeso) + 42}`} fill="none" stroke="#f0b54a" strokeWidth="1.6" strokeDasharray="4 4" />
-          <rect x={X + 120} y={yDe(iBeso) + 30} width="24" height="24" rx="5" fill="#0e0e13" stroke="#f0b54a" strokeWidth="2.5" />
-          <text x={X + 152} y={yDe(iBeso) + 47} className="cb-svg-salida" fill="#f6cf85">
-            {m.nodos.pelea}
-          </text>
-          <path d={`M${X + 132} ${yDe(iBeso) + 56} V${yDe(iBeso) + 70} H${X + 190}`} fill="none" stroke="#ff4d5e" strokeWidth="1.6" strokeDasharray="4 4" />
-          <rect x={X + 190} y={yDe(iBeso) + 58} width="180" height="26" rx="13" fill="#2a0c12" stroke="#ff4d5e" />
-          <text x={X + 280} y={yDe(iBeso) + 76} textAnchor="middle" className="cb-svg-salida" fill="#ff9aa6">
-            {m.salidas.nikki}
-          </text>
-        </g>
-        {/* Los bad ends de dentro del juego, como marcas rojas a lo largo del tramo. */}
-        <g>
-          <path d={`M${X + 34} ${yDe(iJuego)} V${yDe(iInvierno)}`} stroke="#ff4d5e" strokeWidth="2" strokeOpacity="0.5" />
-          {Array.from({ length: 8 }, (_, i) => {
-            const y = yDe(iJuego) + ((yDe(iInvierno) - yDe(iJuego)) * i) / 7;
-            return (
-              <text key={i} x={X + 34} y={y + 5} textAnchor="middle" className="cb-svg-x">
-                ✕
-              </text>
-            );
-          })}
-          <text x={X + 56} y={(yDe(iJuego) + yDe(iInvierno)) / 2 + 5} className="cb-svg-salida" fill="#ff9aa6">
-            {m.bads}
-          </text>
-        </g>
-      </svg>
+      <div className="cb-mapa-mitades">
+        <Mitad m={m} nodos={MUNDO} n={1} titulo={m.mitades[0]}>
+          {/* El beso: propasarse lleva a la pelea con Nikki, y perderla, a un bad end. */}
+          <g>
+            <path d={`M${X + 10} ${yb + 8} C ${X + 50} ${yb + 30}, ${X + 60} ${yb + 38}, ${X + 100} ${yb + 40}`} fill="none" stroke="#f0b54a" strokeWidth="1.6" strokeDasharray="4 4" />
+            <rect x={X + 100} y={yb + 28} width="24" height="24" rx="5" fill="#0e0e13" stroke="#f0b54a" strokeWidth="2.5" />
+            <text x={X + 132} y={yb + 45} className="cb-svg-salida" fill="#f6cf85">
+              {m.nodos.pelea}
+            </text>
+            <path d={`M${X + 112} ${yb + 54} V${yb + 68} H${X + 250}`} fill="none" stroke="#ff4d5e" strokeWidth="1.6" strokeDasharray="4 4" />
+            <rect x={X + 250} y={yb + 55} width="150" height="26" rx="13" fill="#2a0c12" stroke="#ff4d5e" />
+            <text x={X + 325} y={yb + 73} textAnchor="middle" className="cb-svg-salida" fill="#ff9aa6">
+              {m.salidas.nikki}
+            </text>
+          </g>
+        </Mitad>
+        <Mitad m={m} nodos={JUEGO} n={2} titulo={m.mitades[1]}>
+          {/* Los bad ends de dentro del juego, como marcas rojas a lo largo del tramo. */}
+          <g>
+            <path d={`M${X + 34} ${yDe(0)} V${yDe(iInvierno)}`} stroke="#ff4d5e" strokeWidth="2" strokeOpacity="0.5" />
+            {Array.from({ length: 8 }, (_, i) => {
+              const y = yDe(0) + ((yDe(iInvierno) - yDe(0)) * i) / 7;
+              return (
+                <text key={i} x={X + 34} y={y + 5} textAnchor="middle" className="cb-svg-x">
+                  ✕
+                </text>
+              );
+            })}
+            <text x={X + 56} y={(yDe(0) + yDe(iInvierno)) / 2 + 5} className="cb-svg-salida" fill="#ff9aa6">
+              {m.bads}
+            </text>
+          </g>
+        </Mitad>
+      </div>
       <ul className="cb-leyenda">
         <li>
           <i className="l-decision" /> {m.leyenda[0]}
@@ -321,6 +342,7 @@ export function CajaBlanca({ lang }: { lang: Lang }) {
   const b = t.bloques;
   return (
     <section id="caja" className="seccion caja">
+      <img className="tecnico-emblema" src="/marca/tecnico_emblema.webp" alt="" />
       <p className="cb-ojo">
         <span>$</span> git clone project_genesis
       </p>
@@ -368,7 +390,7 @@ export function CajaBlanca({ lang }: { lang: Lang }) {
         <Codigo codigo={CODIGO.eleccion} archivo={b.flujo.pie} />
       </div>
 
-      <div className="cb-bloque cb-dos cb-mapa-bloque">
+      <div className="cb-bloque cb-mapa-bloque">
         <div className="cb-texto">
           <h3>{b.mapa.t}</h3>
           {b.mapa.p.map((p) => (

@@ -17,7 +17,7 @@ export const PERSONAJES = [
 ] as const;
 
 const es = {
-  nav: { proyecto: 'El proyecto', personajes: 'Personajes', capturas: 'Capturas', boringram: 'Boringram', bootcamp: 'Bootcamp', rpg: 'El RPG', autor: 'El autor', apoyar: 'Apoyar' },
+  nav: { proyecto: 'El proyecto', personajes: 'Personajes', capturas: 'Capturas', boringram: 'Boringram', bootcamp: 'Bootcamp', rpg: 'El RPG', autor: 'El autor', apoyar: 'Apoyar', mas: 'Más', jugar: 'Jugar demo' },
   hero: {
     generos: 'Novela visual · Peleas por turnos · Comedia negra',
     tagline:
@@ -27,7 +27,10 @@ const es = {
     gratis: 'Gratis, en el navegador, en español e inglés.',
   },
   aviso18: {
-    titulo: 'Contenido para adultos (+18)',
+    chip: 'Juego para mayores de 18 años',
+    titulo: 'Advertencia de contenido del juego:',
+    resumen: 'obra de ficción para adultos.',
+    ver: 'Ver los temas',
     texto: 'PROJECT GENESIS es una obra de ficción para adultos. Trata temas que pueden resultar perturbadores o sensibles para algunas personas:',
     temas: [
       { t: 'Manipulación emocional', d: 'codependencia y relaciones disfuncionales.' },
@@ -122,7 +125,7 @@ const es = {
 };
 
 const en: typeof es = {
-  nav: { proyecto: 'The project', personajes: 'Characters', capturas: 'Screenshots', boringram: 'Boringram', bootcamp: 'Bootcamp', rpg: 'The RPG', autor: 'The author', apoyar: 'Support' },
+  nav: { proyecto: 'The project', personajes: 'Characters', capturas: 'Screenshots', boringram: 'Boringram', bootcamp: 'Bootcamp', rpg: 'The RPG', autor: 'The author', apoyar: 'Support', mas: 'More', jugar: 'Play demo' },
   hero: {
     generos: 'Visual novel · Turn-based battles · Dark comedy',
     tagline:
@@ -132,7 +135,10 @@ const en: typeof es = {
     gratis: 'Free, in your browser, in Spanish and English.',
   },
   aviso18: {
-    titulo: 'Adult content (18+)',
+    chip: 'A game for ages 18 and up',
+    titulo: 'The game’s content warning:',
+    resumen: 'a work of fiction for adults.',
+    ver: 'See the themes',
     texto: 'PROJECT GENESIS is a work of fiction for adults. It deals with themes that some people may find disturbing or sensitive:',
     temas: [
       { t: 'Emotional manipulation', d: 'codependency and dysfunctional relationships.' },

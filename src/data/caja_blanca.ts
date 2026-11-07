@@ -123,6 +123,7 @@ const es = {
         correo: 'Spam',
       },
       bads: 'y 8 bad ends más en el camino',
+      mitades: ['En el mundo real', 'Dentro del juego'],
       leyenda: ['decisión', 'final temprano', 'bad end', 'pelea'],
     },
     rpg: {
@@ -241,6 +242,7 @@ const en: typeof es = {
         correo: 'Spam',
       },
       bads: 'and 8 more bad ends along the way',
+      mitades: ['In the real world', 'Inside the game'],
       leyenda: ['choice', 'early ending', 'bad end', 'battle'],
     },
     rpg: {

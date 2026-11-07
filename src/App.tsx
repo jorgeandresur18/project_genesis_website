@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { TitleBackground } from './components/TitleBackground';
 import { PeleaEnBucle } from './components/PeleaEnBucle';
 import { Sprite, type Hoja } from './components/Sprite';
@@ -27,6 +27,11 @@ const celular = () => window.matchMedia('(max-width: 700px)').matches;
 
 // El enlace de los aspectos técnicos (antes «Caja blanca»).
 const TECNICO = 'aspectos-tecnicos';
+// La barra: a la vista, lo principal; en «Más», el resto. En el celular, todo en el menú ☰.
+const NAV_PRINCIPAL = ['proyecto', 'personajes', 'capturas', 'bootcamp', 'rpg'] as const;
+const NAV_MAS = ['boringram', 'caja', 'autor'] as const;
+// Las secciones en el orden de la página, para saber cuál se está viendo.
+const SECCIONES = ['proyecto', 'personajes', 'capturas', 'boringram', 'bootcamp', 'rpg', 'autor', 'apoyar'];
 
 function idiomaInicial(): Lang {
   try {
@@ -40,7 +45,8 @@ function idiomaInicial(): Lang {
 
 export function App() {
   const [lang, setLang] = useState<Lang>(idiomaInicial);
-  const [abierta, setAbierta] = useState<{ c: string; alt: string } | null>(null);
+  // La captura abierta en grande. `vertical`: las de Boringram, tomadas en un celular (sin versión _cel).
+  const [abierta, setAbierta] = useState<{ c: string; alt: string; vertical?: boolean } | null>(null);
   // El botón para volver arriba aparece cuando ya se bajó más de una pantalla.
   const [abajo, setAbajo] = useState(false);
   useEffect(() => {
@@ -51,6 +57,52 @@ export function App() {
   }, []);
   const t = TEXTOS[lang];
   const [menu, setMenu] = useState(false);
+  // La advertencia de «El proyecto»: cerrada; se abre sola si se llega desde la línea +18 de la portada.
+  const [advertencia, setAdvertencia] = useState(false);
+  // La barra: transparente arriba del todo; al bajar se oscurece y se hace más baja.
+  const [compacta, setCompacta] = useState(false);
+  // La sección que se está viendo (la última cuyo comienzo ya pasó el tercio de arriba de la pantalla).
+  const [activa, setActiva] = useState<string | null>(null);
+  useEffect(() => {
+    let cuadro = 0;
+    const medir = () => {
+      cuadro = 0;
+      setCompacta(window.scrollY > 24);
+      let actual: string | null = null;
+      for (const id of SECCIONES) {
+        const el = document.getElementById(id);
+        if (el && el.offsetParent !== null && el.getBoundingClientRect().top <= window.innerHeight * 0.35) actual = id;
+      }
+      setActiva(actual);
+    };
+    const onScroll = () => {
+      if (!cuadro) cuadro = requestAnimationFrame(medir);
+    };
+    medir();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(cuadro);
+    };
+  }, []);
+  // «Más»: se abre al pasar el mouse o con un clic (y se cierra al elegir, con Escape o al tocar fuera).
+  const [mas, setMas] = useState(false);
+  const masRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!mas) return;
+    const fuera = (e: PointerEvent) => {
+      if (!masRef.current?.contains(e.target as Node)) setMas(false);
+    };
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMas(false);
+    document.addEventListener('pointerdown', fuera);
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('pointerdown', fuera);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [mas]);
   useEffect(() => {
     if (!menu) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenu(false);
@@ -73,6 +125,28 @@ export function App() {
     const destino = window.location.hash ? document.getElementById(window.location.hash.slice(1)) : null;
     destino?.scrollIntoView();
   }, [tecnico]);
+  // La línea plateada bajo el enlace de la sección que se ve: se desliza de uno a otro.
+  const navRef = useRef<HTMLElement>(null);
+  const clave = tecnico ? 'mas' : activa && (NAV_MAS as readonly string[]).includes(activa) ? 'mas' : activa;
+  const [linea, setLinea] = useState<{ left: number; width: number } | null>(null);
+  useLayoutEffect(() => {
+    const medir = () => {
+      const el = clave ? navRef.current?.querySelector<HTMLElement>(`[data-k="${clave}"]`) : null;
+      const nav = navRef.current;
+      if (!el || !nav) return setLinea(null);
+      const r = el.getBoundingClientRect();
+      setLinea({ left: r.left - nav.getBoundingClientRect().left, width: r.width });
+    };
+    medir();
+    // Otra vez cuando la barra termina de cambiar de alto (al bajar o volver arriba) y cargan las fuentes.
+    const otra = window.setTimeout(medir, 350);
+    document.fonts?.ready.then(medir);
+    window.addEventListener('resize', medir);
+    return () => {
+      window.clearTimeout(otra);
+      window.removeEventListener('resize', medir);
+    };
+  }, [clave, lang, compacta]);
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -95,33 +169,86 @@ export function App() {
         <TitleBackground lang={lang} />
       </div>
 
-      <header className="nav">
+      <header className={`nav ${compacta || menu ? 'compacta' : ''}`}>
         <a href="#inicio" className="nav-marca" aria-label="PROJECT GENESIS" title="PROJECT GENESIS">
           <img src="/marca/icono-256.png" alt="" />
+          <i className="nav-marca-brillo" aria-hidden />
         </a>
-        <nav id="nav-enlaces" className={menu ? 'abierto' : undefined} onClick={() => setMenu(false)}>
+
+        {/* En la computadora: lo principal a la vista y el resto en «Más». */}
+        <nav className="nav-principal" ref={navRef} aria-label={t.nav.mas}>
+          {NAV_PRINCIPAL.map((k) => (
+            <a key={k} data-k={k} href={`#${k}`} className={clave === k ? 'activo' : undefined}>
+              {t.nav[k]}
+            </a>
+          ))}
+          <div className={`nav-mas ${mas ? 'abierto' : ''}`} ref={masRef}>
+            <button
+              type="button"
+              data-k="mas"
+              className={clave === 'mas' ? 'activo' : undefined}
+              aria-expanded={mas}
+              aria-haspopup="true"
+              onClick={() => setMas((m) => !m)}
+            >
+              {t.nav.mas}
+              <svg viewBox="0 0 10 6" aria-hidden>
+                <path d="M1 1l4 4 4-4" />
+              </svg>
+            </button>
+            <div className="nav-mas-menu" onClick={() => setMas(false)}>
+              {NAV_MAS.map((k) => (
+                <a key={k} href={`#${k === 'caja' ? TECNICO : k}`} className={(k === 'caja' ? tecnico : activa === k) ? 'activo' : undefined}>
+                  {k === 'caja' ? (
+                    <>
+                      <img className="nav-tecnico-icono" src="/marca/tecnico_emblema.webp" alt="" /> {CAJA[lang].nav}
+                    </>
+                  ) : (
+                    t.nav[k]
+                  )}
+                </a>
+              ))}
+            </div>
+          </div>
+          {linea && <span className="nav-linea" style={{ transform: `translateX(${linea.left}px)`, width: linea.width }} aria-hidden />}
+        </nav>
+
+        <div className="nav-acciones">
+          <a className={`nav-jugar ${abajo ? 'visible' : ''}`} href={DEMO} target="_blank" rel="noreferrer" tabIndex={abajo ? 0 : -1}>
+            ▶ {t.nav.jugar}
+          </a>
+          <a className={`nav-apoyar ${!tecnico && activa === 'apoyar' ? 'activo' : ''}`} href="#apoyar">
+            ♥ {t.nav.apoyar}
+          </a>
+          <button type="button" className="nav-idioma" onClick={() => setLang(lang === 'es' ? 'en' : 'es')}>
+            {t.idioma}
+          </button>
+          {/* En el celular los enlaces van en un menú desplegable. */}
+          <button
+            type="button"
+            className={`nav-hamburguesa ${menu ? 'abierto' : ''}`}
+            aria-label={CAJA[lang].menu}
+            aria-expanded={menu}
+            aria-controls="nav-enlaces"
+            onClick={() => setMenu((m) => !m)}
+          >
+            <i />
+            <i />
+            <i />
+          </button>
+        </div>
+
+        {/* El menú del celular: todo, en una lista. */}
+        <nav id="nav-enlaces" className={`nav-movil ${menu ? 'abierto' : ''}`} onClick={() => setMenu(false)} aria-label={CAJA[lang].menu}>
           {(['proyecto', 'personajes', 'capturas', 'boringram', 'bootcamp', 'rpg', 'caja', 'autor', 'apoyar'] as const).map((k) => (
-            <a key={k} href={`#${k === 'caja' ? TECNICO : k}`} className={k === 'caja' && tecnico ? 'activo' : undefined}>
+            <a key={k} href={`#${k === 'caja' ? TECNICO : k}`} className={(k === 'caja' ? tecnico : !tecnico && activa === k) ? 'activo' : undefined}>
               {k === 'caja' ? CAJA[lang].nav : t.nav[k]}
             </a>
           ))}
+          <a className="boton boton-principal nav-movil-jugar" href={DEMO} target="_blank" rel="noreferrer">
+            ▶ {t.hero.jugar}
+          </a>
         </nav>
-        <button type="button" className="nav-idioma" onClick={() => setLang(lang === 'es' ? 'en' : 'es')}>
-          {t.idioma}
-        </button>
-        {/* En el celular los enlaces van en un menú desplegable. */}
-        <button
-          type="button"
-          className={`nav-hamburguesa ${menu ? 'abierto' : ''}`}
-          aria-label={CAJA[lang].menu}
-          aria-expanded={menu}
-          aria-controls="nav-enlaces"
-          onClick={() => setMenu((m) => !m)}
-        >
-          <i />
-          <i />
-          <i />
-        </button>
       </header>
       {menu && <div className="nav-velo" onClick={() => setMenu(false)} aria-hidden />}
 
@@ -152,22 +279,10 @@ export function App() {
             </a>
           </div>
           <p className="hero-nota">{t.hero.gratis}</p>
-          {/* La advertencia de contenido, con los mismos temas que la del juego (src/data/advertencia.json del juego). */}
-          <aside className="hero-aviso aviso18" aria-label={t.aviso18.titulo}>
-            <img src="/marca/emblema_18.webp" alt="+18" />
-            <div>
-              <b>{t.aviso18.titulo}</b>
-              <p>{t.aviso18.texto}</p>
-              <ul>
-                {t.aviso18.temas.map((tema) => (
-                  <li key={tema.t}>
-                    <strong>{tema.t}:</strong> {tema.d}
-                  </li>
-                ))}
-              </ul>
-              <small>{t.aviso18.ficcion}</small>
-            </div>
-          </aside>
+          {/* En la portada, solo una línea neutra; la advertencia está en «El proyecto». */}
+          <a className="hero-18" href="#advertencia" onClick={() => setAdvertencia(true)}>
+            {t.aviso18.chip}
+          </a>
         </section>
 
         {/* El proyecto */}
@@ -193,6 +308,25 @@ export function App() {
               </article>
             ))}
           </div>
+          {/* La advertencia del juego, con la historia: visible pero discreta; los temas se abren con un clic. */}
+          <details id="advertencia" className="advertencia" open={advertencia} onToggle={(e) => setAdvertencia(e.currentTarget.open)}>
+            <summary>
+              <img src="/marca/emblema_18.webp" alt="+18" />
+              <span>
+                <b>{t.aviso18.titulo}</b> {t.aviso18.resumen}
+              </span>
+              <i aria-hidden>{t.aviso18.ver}</i>
+            </summary>
+            <p>{t.aviso18.texto}</p>
+            <ul>
+              {t.aviso18.temas.map((tema) => (
+                <li key={tema.t}>
+                  <strong>{tema.t}:</strong> {tema.d}
+                </li>
+              ))}
+            </ul>
+            <small>{t.aviso18.ficcion}</small>
+          </details>
         </section>
 
         {/* Personajes */}
@@ -256,7 +390,9 @@ export function App() {
           <div className="bor-telefonos">
             {BORINGRAM.map((b, i) => (
               <figure key={b} className="bor-telefono">
-                <img src={`/capturas/${b}.jpg`} alt={t.boringram.items[i]} loading="lazy" />
+                <button type="button" onClick={() => setAbierta({ c: b, alt: t.boringram.items[i], vertical: true })} aria-label={t.boringram.items[i]}>
+                  <img src={`/capturas/${b}.jpg`} alt={t.boringram.items[i]} loading="lazy" />
+                </button>
                 <figcaption>{t.boringram.items[i]}</figcaption>
               </figure>
             ))}
@@ -328,6 +464,7 @@ export function App() {
 
         {/* Aspectos técnicos: en la página, solo un avance con el botón a la vista aparte. */}
         <section className="seccion tecnico-avance">
+          <img className="tecnico-emblema" src="/marca/tecnico_emblema.webp" alt="" />
           <p className="cb-ojo">
             <span>$</span> git clone project_genesis
           </p>
@@ -394,9 +531,9 @@ export function App() {
       </a>
 
       {abierta !== null && (
-        <div className="visor" role="dialog" aria-label={abierta.alt} onClick={() => setAbierta(null)}>
+        <div className={`visor ${abierta.vertical ? 'visor-vertical' : ''}`} role="dialog" aria-label={abierta.alt} onClick={() => setAbierta(null)}>
           <picture>
-            <source media="(max-width: 700px)" srcSet={`/capturas/${abierta.c}_cel.jpg`} />
+            {!abierta.vertical && <source media="(max-width: 700px)" srcSet={`/capturas/${abierta.c}_cel.jpg`} />}
             <img src={`/capturas/${abierta.c}.jpg`} alt={abierta.alt} />
           </picture>
           <button type="button" className="boton" onClick={() => setAbierta(null)}>

@@ -19,19 +19,6 @@ a { color: inherit; }
 /* El fondo del menú de inicio, fijo detrás de todo. */
 .fondo { position: fixed; inset: 0; z-index: -1; }
 
-/* ---------- Barra de arriba ---------- */
-.nav { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 1rem; padding: 0.7rem clamp(1rem, 4vw, 2.5rem); background: rgba(5, 5, 7, 0.72); backdrop-filter: blur(10px); border-bottom: 1px solid var(--borde); }
-.nav-marca { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; font-family: Montserrat, sans-serif; font-weight: 700; letter-spacing: 0.18em; font-size: 0.85rem; white-space: nowrap; }
-.nav-marca img { width: 1.9rem; height: 1.9rem; }
-.nav nav { display: flex; gap: 1.2rem; margin-left: auto; }
-.nav nav a { color: var(--tenue); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-.nav nav a:hover { color: var(--texto); }
-.nav-idioma { padding: 0.35rem 0.75rem; border: 1px solid var(--borde); border-radius: 999px; background: none; color: var(--texto); font: 600 0.8rem Montserrat, sans-serif; letter-spacing: 0.1em; cursor: pointer; }
-@media (max-width: 860px) {
-  .nav nav { display: none; }
-  .nav-idioma { margin-left: auto; }
-}
-
 /* ---------- Botones ---------- */
 .boton { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.8rem 1.4rem; border: 1px solid rgba(214, 218, 226, 0.35); border-radius: 999px; background: rgba(10, 10, 14, 0.6); color: var(--texto); font: 600 0.95rem Montserrat, sans-serif; letter-spacing: 0.06em; text-decoration: none; cursor: pointer; transition: transform 0.15s, background 0.2s, border-color 0.2s; }
 .boton:hover { transform: translateY(-2px); border-color: var(--plata); background: rgba(30, 30, 38, 0.8); }
@@ -417,37 +404,116 @@ button.tv-rca { padding: 0; border: none; cursor: pointer; }
 .tecnico { padding-top: 1.5rem; }
 .tecnico-barra { max-width: 76rem; margin: 0 auto; padding: 0 1.25rem; }
 .tecnico .seccion { padding-top: 2rem; }
-.nav nav a.activo { color: var(--texto); }
 
 /* Aspectos técnicos en la página: un avance corto con el botón. */
 .tecnico-avance { padding-top: clamp(2rem, 5vw, 3.5rem); padding-bottom: clamp(2rem, 5vw, 3.5rem); }
 .tecnico-avance h2 { font-size: clamp(1.4rem, 4vw, 2rem); }
 .tecnico-avance .boton { margin-top: 0.5rem; text-align: center; }
 
-/* El menú hamburguesa: solo cuando los enlaces no caben en la barra. */
-.nav-hamburguesa { display: none; }
+
+
+/* ---------- Barra de arriba ----------
+   Arriba del todo, transparente sobre las estrellas; al bajar se oscurece, se desenfoca y se hace más baja.
+   A la vista lo principal (con una línea plateada bajo la sección que se ve), el resto en «Más»,
+   y a la derecha Apoyar (rosa, el color de Nikki) y Jugar demo (plateado, aparece al bajar). */
+.nav { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: minmax(max-content, 1fr) auto minmax(max-content, 1fr); align-items: center; gap: clamp(1rem, 3vw, 2.5rem); padding: 1.1rem clamp(1rem, 4vw, 2.5rem); background: transparent; border-bottom: 1px solid transparent; transition: padding 0.3s, background 0.3s, border-color 0.3s, box-shadow 0.3s; }
+.nav.compacta { padding-top: 0.55rem; padding-bottom: 0.55rem; background: rgba(5, 5, 7, 0.78); backdrop-filter: blur(12px) saturate(1.2); -webkit-backdrop-filter: blur(12px) saturate(1.2); border-bottom-color: var(--borde); box-shadow: 0 0.6rem 2rem rgba(0, 0, 0, 0.35); }
+
+.nav-marca { position: relative; display: block; flex: none; width: 2.5rem; height: 2.5rem; transition: width 0.3s, height 0.3s; }
+.nav.compacta .nav-marca { width: 2.15rem; height: 2.15rem; }
+.nav-marca img { display: block; width: 100%; height: 100%; filter: drop-shadow(0 0 0.7rem rgba(200, 210, 255, 0.25)); }
+.nav-marca-brillo { position: absolute; inset: 0; pointer-events: none; -webkit-mask: url('/marca/icono-256.png') center / contain no-repeat; mask: url('/marca/icono-256.png') center / contain no-repeat; background: linear-gradient(110deg, transparent 35%, rgba(255, 255, 255, 0.9) 50%, transparent 65%) 150% 0 / 250% 100% no-repeat; mix-blend-mode: screen; }
+.nav-marca:hover .nav-marca-brillo, .nav-marca:focus-visible .nav-marca-brillo { animation: chapa 0.9s ease-out forwards; }
+
+.nav-principal { position: relative; display: flex; align-items: center; gap: clamp(1rem, 2vw, 1.8rem); }
+.nav-principal > a, .nav-mas > button { position: relative; padding: 0.35rem 0; border: none; background: none; color: var(--tenue); font: 500 0.78rem Montserrat, sans-serif; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; white-space: nowrap; cursor: pointer; transition: color 0.2s; }
+.nav-principal > a:hover, .nav-mas > button:hover, .nav-principal > a.activo, .nav-mas > button.activo { color: var(--texto); }
+.nav-mas > button { display: inline-flex; align-items: center; gap: 0.4rem; }
+.nav-mas > button svg { width: 0.6rem; height: 0.4rem; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: transform 0.2s; }
+.nav-mas.abierto > button svg, .nav-mas:hover > button svg { transform: rotate(180deg); }
+.nav-linea { position: absolute; left: 0; bottom: -0.15rem; height: 1px; background: linear-gradient(90deg, transparent, var(--plata), transparent); box-shadow: 0 0 0.6rem rgba(220, 224, 232, 0.6); transition: transform 0.4s cubic-bezier(0.3, 0.9, 0.3, 1), width 0.4s cubic-bezier(0.3, 0.9, 0.3, 1); pointer-events: none; }
+
+.nav-mas { position: relative; }
+.nav-mas-menu { position: absolute; top: calc(100% + 0.6rem); right: -0.8rem; display: grid; min-width: 13rem; padding: 0.4rem; border: 1px solid var(--borde); border-radius: 0.8rem; background: rgba(10, 10, 14, 0.94); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.6); opacity: 0; translate: 0 -0.4rem; visibility: hidden; transition: opacity 0.18s, translate 0.18s, visibility 0.18s; }
+/* Un puente invisible para que el menú no se cierre al bajar el mouse hasta él. */
+.nav-mas-menu::before { content: ''; position: absolute; left: 0; right: 0; top: -0.7rem; height: 0.7rem; }
+.nav-mas:hover .nav-mas-menu, .nav-mas.abierto .nav-mas-menu, .nav-mas:focus-within .nav-mas-menu { opacity: 1; translate: 0 0; visibility: visible; }
+.nav-mas-menu a { display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 0.8rem; border-radius: 0.5rem; color: var(--tenue); font-size: 0.9rem; text-decoration: none; transition: background 0.15s, color 0.15s; }
+.nav-mas-menu a:hover, .nav-mas-menu a.activo { background: rgba(214, 218, 226, 0.07); color: var(--texto); }
+.nav-tecnico-icono { width: 1.4rem; height: 1.4rem; object-fit: contain; filter: drop-shadow(0 0 0.3rem rgba(200, 210, 255, 0.3)); }
+
+.nav-acciones { display: flex; align-items: center; justify-content: flex-end; gap: 0.6rem; }
+.nav-jugar, .nav-apoyar { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.42rem 0.95rem; border-radius: 999px; font: 600 0.78rem Montserrat, sans-serif; letter-spacing: 0.06em; text-decoration: none; white-space: nowrap; transition: transform 0.15s, background 0.2s, border-color 0.2s, box-shadow 0.2s, opacity 0.25s, max-width 0.3s, padding 0.3s, margin 0.3s; }
+.nav-jugar { max-width: 0; padding-left: 0; padding-right: 0; margin-right: -0.6rem; overflow: hidden; opacity: 0; pointer-events: none; background: linear-gradient(180deg, #f4f5f8, #b9bec8); color: #111; }
+.nav-jugar.visible { max-width: 12rem; padding-left: 0.95rem; padding-right: 0.95rem; margin-right: 0; opacity: 1; pointer-events: auto; box-shadow: 0 0 1.2rem rgba(220, 224, 232, 0.2); }
+.nav-apoyar { border: 1px solid rgba(255, 111, 165, 0.45); color: #ffc2d8; background: rgba(255, 111, 165, 0.06); }
+.nav-apoyar:hover, .nav-apoyar.activo { border-color: var(--acento); background: rgba(255, 111, 165, 0.16); color: #fff; box-shadow: 0 0 1.2rem rgba(255, 111, 165, 0.25); }
+.nav-jugar:hover, .nav-apoyar:hover { transform: translateY(-1px); }
+.nav-idioma { padding: 0.38rem 0.75rem; border: 1px solid var(--borde); border-radius: 999px; background: none; color: var(--texto); font: 600 0.75rem Montserrat, sans-serif; letter-spacing: 0.12em; cursor: pointer; transition: border-color 0.2s; }
+.nav-idioma:hover { border-color: var(--plata); }
+
+.nav-hamburguesa, .nav-movil { display: none; }
+@media (max-width: 1100px) { .nav-jugar { display: none; } }
 @media (max-width: 860px) {
-  .nav-idioma { margin-left: auto; }
+  .nav { grid-template-columns: auto 1fr; padding-top: 0.75rem; padding-bottom: 0.75rem; }
+  .nav-principal { display: none; }
+  .nav-acciones { margin-left: auto; }
   .nav-hamburguesa { display: grid; align-content: center; gap: 0.3rem; width: 2.5rem; height: 2.3rem; padding: 0 0.55rem; border: 1px solid var(--borde); border-radius: 0.6rem; background: none; cursor: pointer; }
   .nav-hamburguesa i { display: block; height: 2px; border-radius: 2px; background: var(--texto); transition: transform 0.25s, opacity 0.2s; }
   .nav-hamburguesa.abierto i:nth-child(1) { transform: translateY(calc(0.3rem + 2px)) rotate(45deg); }
   .nav-hamburguesa.abierto i:nth-child(2) { opacity: 0; }
   .nav-hamburguesa.abierto i:nth-child(3) { transform: translateY(calc(-0.3rem - 2px)) rotate(-45deg); }
-  .nav nav.abierto { position: absolute; top: 100%; left: 0; right: 0; display: grid; gap: 0; max-height: calc(100svh - 4rem); overflow-y: auto; padding: 0.4rem clamp(1rem, 4vw, 2.5rem) 0.8rem; background: rgba(5, 5, 7, 0.96); backdrop-filter: blur(10px); border-bottom: 1px solid var(--borde); box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.6); }
-  .nav nav.abierto a { padding: 0.75rem 0.2rem; border-bottom: 1px solid rgba(214, 218, 226, 0.08); color: var(--texto); font-size: 1rem; }
-  .nav nav.abierto a:last-child { border-bottom: none; }
-  .nav nav.abierto a.activo { color: var(--acento); }
+  .nav-movil.abierto { position: absolute; top: 100%; left: 0; right: 0; display: grid; max-height: calc(100svh - 4rem); overflow-y: auto; padding: 0.4rem clamp(1rem, 4vw, 2.5rem) 1rem; background: rgba(5, 5, 7, 0.97); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--borde); box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.6); }
+  .nav-movil a:not(.boton) { padding: 0.8rem 0.2rem; border-bottom: 1px solid rgba(214, 218, 226, 0.08); color: var(--texto); font: 500 0.85rem Montserrat, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; }
+  .nav-movil a.activo { color: var(--acento); }
+  .nav-movil-jugar { margin-top: 1rem; }
   .nav-velo { position: fixed; inset: 0; z-index: 19; background: rgba(0, 0, 0, 0.45); }
 }
+@media (max-width: 420px) { .nav-apoyar { padding: 0.42rem 0.7rem; } }
+@media (prefers-reduced-motion: reduce) {
+  .nav, .nav-linea, .nav-marca { transition: none; }
+  .nav-marca:hover .nav-marca-brillo { animation: none; }
+}
 
-/* La advertencia de contenido de la portada: el emblema y, al lado, los temas que trata el juego. */
-.aviso18 { align-items: flex-start; gap: 0.9rem; max-width: 46rem; padding: 0.9rem 1.1rem; font-size: 0.85rem; line-height: 1.5; }
-.aviso18 img { width: 2.6rem; margin-top: 0.1rem; }
-.aviso18 b { display: block; color: #ffd9df; font: 700 0.95rem Montserrat, sans-serif; letter-spacing: 0.04em; }
-.aviso18 p { margin: 0.25rem 0 0.5rem; }
-.aviso18 ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.3rem 1.2rem; margin: 0; padding: 0; list-style: none; }
-.aviso18 li { position: relative; padding-left: 0.9rem; }
-.aviso18 li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 0.35rem; height: 0.35rem; border-radius: 50%; background: #ff5a6e; }
-.aviso18 strong { color: #ffe3e7; font-weight: 600; }
-.aviso18 small { display: block; margin-top: 0.6rem; color: rgba(255, 195, 204, 0.7); font-size: 0.75rem; }
-@media (max-width: 640px) { .aviso18 ul { grid-template-columns: 1fr; } .aviso18 img { width: 2.1rem; } }
+/* El emblema </> de los aspectos técnicos: en su vista y en el avance de la página. */
+.tecnico-emblema { display: block; width: clamp(3.5rem, 9vw, 5rem); height: auto; margin-bottom: 1rem; filter: drop-shadow(0 0 1.2rem rgba(200, 210, 255, 0.22)); }
+
+/* La línea +18 de la portada: neutra y discreta. */
+.hero-18 { margin-top: 0.2rem; color: var(--tenue); font-size: 0.78rem; text-decoration: none; opacity: 0.8; transition: opacity 0.2s, color 0.2s; }
+.hero-18:hover { color: var(--texto); opacity: 1; }
+/* La advertencia del juego en «El proyecto»: un recuadro gris y fino; los temas, al abrirlo. */
+.advertencia { position: relative; margin-top: 2rem; padding: 0.75rem 1rem; border: 1px solid var(--borde); border-radius: 0.8rem; background: rgba(14, 14, 18, 0.55); color: var(--tenue); font-size: 0.85rem; line-height: 1.55; scroll-margin-top: 6rem; }
+.advertencia summary { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; list-style: none; }
+.advertencia summary::-webkit-details-marker { display: none; }
+.advertencia summary img { width: 1.7rem; flex: none; opacity: 0.85; }
+.advertencia summary span { flex: 1; }
+.advertencia summary b { color: #c9ccd4; font-weight: 600; }
+.advertencia summary i { flex: none; color: var(--tenue); font-style: normal; font-size: 0.8rem; white-space: nowrap; transition: color 0.2s; }
+.advertencia summary i::after { content: ' ▸'; display: inline-block; transition: transform 0.2s; }
+.advertencia[open] summary i::after { transform: rotate(90deg); }
+.advertencia summary:hover i { color: var(--texto); }
+.advertencia p { margin: 0.8rem 0 0.5rem; }
+.advertencia ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 1.5rem; margin: 0; padding-left: 1.1rem; }
+.advertencia strong { color: #c9ccd4; font-weight: 600; }
+.advertencia small { display: block; margin-top: 0.6rem; opacity: 0.8; }
+@media (max-width: 640px) { .advertencia ul { grid-template-columns: 1fr; } .advertencia summary { flex-wrap: wrap; row-gap: 0.2rem; } .advertencia summary span { flex-basis: calc(100% - 2.5rem); } .advertencia summary i { margin-left: 2.45rem; } }
+
+/* Boringram: cada captura se abre en grande al tocarla, como las demás. */
+.bor-telefono > button { display: block; width: 100%; padding: 0; border: none; background: none; cursor: zoom-in; border-radius: 1.6rem; }
+.bor-telefono > button img { transition: transform 0.3s, box-shadow 0.3s; }
+.bor-telefono > button:hover img { transform: translateY(-4px); box-shadow: 0 0 0 1px #2a2a32, 0 0 2.6rem rgba(255, 79, 160, 0.3), 0 1.4rem 2.4rem rgba(0, 0, 0, 0.6); }
+.visor-vertical img { max-height: 88vh; width: auto; border-radius: 1.4rem; border: 0.4rem solid #17171c; }
+@media (max-width: 700px) { .visor-vertical img { max-height: 78vh; } }
+
+/* El mapa del Capítulo 1: el texto arriba y las dos mitades lado a lado, a todo lo ancho. */
+.cb-mapa-bloque .cb-texto p { max-width: 52rem; }
+.cb-mapa { padding: clamp(0.8rem, 2vw, 1.4rem); }
+.cb-mapa-mitades { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 clamp(1rem, 3vw, 2.5rem); }
+.cb-mapa-mitades svg { min-width: 0; max-width: none; margin: 0; }
+.cb-mapa-mitades svg + svg { border-left: 1px solid rgba(214, 218, 226, 0.08); padding-left: clamp(0.5rem, 2vw, 1.5rem); }
+.cb-svg-mitad { font: 600 13px Montserrat, sans-serif; letter-spacing: 0.16em; text-transform: uppercase; fill: #9a9aa6; }
+.cb-svg-mitad-n { fill: #ff6fa5; font-weight: 700; }
+@media (max-width: 900px) {
+  .cb-mapa-mitades { grid-template-columns: 1fr; gap: 1rem; }
+  .cb-mapa-mitades svg + svg { border-left: none; padding-left: 0; border-top: 1px solid rgba(214, 218, 226, 0.08); padding-top: 0.8rem; }
+}
