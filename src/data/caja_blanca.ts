@@ -54,7 +54,7 @@ const es = {
   nav: 'Aspectos técnicos',
   titulo: 'Aspectos técnicos: cómo está hecho',
   volver: 'Volver a la página',
-  avance: { titulo: 'Por dentro', texto: 'Una novela visual y un RPG por turnos que corren en el navegador, con la historia en datos, el motor en TypeScript y cada ruta comprobada automáticamente.', boton: '¿Quieres conocer más? Aspectos técnicos del proyecto' },
+  avance: { titulo: 'Por dentro', texto: 'Una novela visual y un JRPG por turnos que corren en el navegador, con la historia en datos, el motor en TypeScript y cada ruta comprobada automáticamente.', boton: '¿Quieres conocer más? Aspectos técnicos del proyecto' },
   menu: 'Menú',
   sub: 'Lo que juegas en la demo del Capítulo 1, abierto por dentro. Para quien quiera saber cómo funciona, o conocer a quien lo hizo.',
   cifras: [
@@ -173,7 +173,7 @@ const en: typeof es = {
   nav: 'Technical details',
   titulo: 'Technical details: how it’s made',
   volver: 'Back to the page',
-  avance: { titulo: 'Under the hood', texto: 'A visual novel and a turn-based RPG that run in the browser, with the story in data, the engine in TypeScript and every route checked automatically.', boton: 'Want to know more? The technical details of the project' },
+  avance: { titulo: 'Under the hood', texto: 'A visual novel and a turn-based JRPG that run in the browser, with the story in data, the engine in TypeScript and every route checked automatically.', boton: 'Want to know more? The technical details of the project' },
   menu: 'Menu',
   sub: 'What you play in the Chapter 1 demo, opened up. For anyone who wants to know how it works, or meet the person who made it.',
   cifras: [

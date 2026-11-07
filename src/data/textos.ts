@@ -19,7 +19,7 @@ export const PERSONAJES = [
 const es = {
   nav: { proyecto: 'El proyecto', personajes: 'Personajes', capturas: 'Capturas', boringram: 'Boringram', bootcamp: 'Bootcamp', rpg: 'El RPG', autor: 'El autor', apoyar: 'Apoyar', mas: 'Más', jugar: 'Jugar demo' },
   hero: {
-    generos: 'Novela visual · Peleas por turnos · Comedia negra',
+    generos: 'Novela visual · JRPG · Comedia negra',
     tagline:
       'Un programador quemado se queda dormido frente a la computadora y despierta dentro del videojuego que una inteligencia artificial terminó por él. Lo que viene después no es un isekai. O sí, pero de los que pasan factura.',
     jugar: 'Jugar la demo del Capítulo 1',
@@ -50,7 +50,7 @@ const es = {
     ],
     rasgos: [
       { t: 'Novela visual', d: 'Decisiones que cambian la historia, varios finales (y muchos bad ends con humor), un mapa de decisiones y guardado en cualquier momento.' },
-      { t: 'Peleas por turnos', d: 'Un JRPG dentro de la novela: estados, especiales, objetos y jefes. Un homenaje a los clásicos de los 90.' },
+      { t: 'JRPG por turnos', d: 'Combates dentro de la novela: estados, especiales, objetos y jefes. Un homenaje a los JRPG de los 90.' },
       { t: 'Boringram', d: 'El celular de Jair: su red social, sus chats y sus pensamientos, que avanzan con la historia y siguen la hora del mundo real.' },
       { t: 'Modo Retro CRT', d: 'Juega dentro de un televisor de tubo, en 4:3, con botones que funcionan: prende, apaga, sube el volumen y cambia de canal.', dCel: 'En el celular, la pantalla en 4:3 con el efecto de tubo: líneas de barrido, un leve desenfoque y parpadeo. El televisor con sus botones está en la computadora.' },
       { t: 'Bootcamp Genesis', d: 'Un extra para aprender a programar en Coffee, el lenguaje de GENESIS, con un profe que tiene más café que paciencia.' },
@@ -103,7 +103,7 @@ const es = {
     titulo: 'El autor',
     texto: [
       'PROJECT GENESIS es un proyecto indie hecho por una sola persona: Jorge Andrés Urgilés Ruiz, ingeniero de software. La historia, la dirección, el diseño y la programación salieron de una sola cabeza. Nació en octubre de 2026, de noche, después del trabajo, como desahogo.',
-      'Lo técnico: la historia vive en datos y el motor en código. Una novela visual y un RPG por turnos que corren en el navegador, sin instalar nada, con un celular que sigue la hora del mundo real y cada ruta y cada final comprobados automáticamente. Desarrollo web llevado hasta donde no debería llegar.',
+      'Lo técnico: la historia vive en datos y el motor en código. Una novela visual y un JRPG por turnos que corren en el navegador, sin instalar nada, con un celular que sigue la hora del mundo real y cada ruta y cada final comprobados automáticamente. Desarrollo web llevado hasta donde no debería llegar.',
       'Lo artístico: una voz antes que una estética. Humor negro que incomoda en vez de premiar, el contraste entre una fantasía brillante y una vida real sudada, y los juegos y la música de los 80, los 90 y los 2000 como forma de hablar de la soledad.',
       'Lo filosófico: una pregunta de fondo. ¿Qué le debe un creador a lo que creó? Una vida en bucle, como la de Sísifo; criaturas que descubren que su dios es solo un hombre; y la libertad que se teme justo cuando por fin se tiene.',
     ],
@@ -127,7 +127,7 @@ const es = {
 const en: typeof es = {
   nav: { proyecto: 'The project', personajes: 'Characters', capturas: 'Screenshots', boringram: 'Boringram', bootcamp: 'Bootcamp', rpg: 'The RPG', autor: 'The author', apoyar: 'Support', mas: 'More', jugar: 'Play demo' },
   hero: {
-    generos: 'Visual novel · Turn-based battles · Dark comedy',
+    generos: 'Visual novel · JRPG · Dark comedy',
     tagline:
       "A burned-out programmer falls asleep at his computer and wakes up inside the video game an artificial intelligence finished for him. What comes next isn't an isekai. Or it is, but the kind that sends you the bill.",
     jugar: 'Play the Chapter 1 demo',
@@ -158,7 +158,7 @@ const en: typeof es = {
     ],
     rasgos: [
       { t: 'Visual novel', d: 'Choices that change the story, several endings (and plenty of funny bad ends), a decision map and saving at any moment.' },
-      { t: 'Turn-based battles', d: 'A JRPG inside the novel: status effects, specials, items and bosses. A tribute to the 90s classics.' },
+      { t: 'Turn-based JRPG', d: 'Battles inside the novel: status effects, specials, items and bosses. A tribute to the 90s JRPGs.' },
       { t: 'Boringram', d: "Jair's phone: his social network, chats and thoughts, which move along with the story and follow real-world time." },
       { t: 'Retro CRT mode', d: 'Play inside a tube TV, in 4:3, with buttons that work: power, volume and channels.', dCel: 'On your phone, the screen in 4:3 with the tube effect: scanlines, a slight blur and flicker. The TV with its buttons is on desktop.' },
       { t: 'Bootcamp Genesis', d: 'An extra to learn to code in Coffee, the language of GENESIS, with a teacher who has more coffee than patience.' },
@@ -211,7 +211,7 @@ const en: typeof es = {
     titulo: 'The author',
     texto: [
       'PROJECT GENESIS is an indie project made by one person: Jorge Andrés Urgilés Ruiz, software engineer. The story, direction, design and code all came out of a single head. It was born in October 2026, at night, after work, as a way to let off steam.',
-      'The technical side: the story lives in data and the engine in code. A visual novel and a turn-based RPG that run in the browser, nothing to install, with a phone that follows real-world time and every route and ending checked automatically. Web development taken where it was never meant to go.',
+      'The technical side: the story lives in data and the engine in code. A visual novel and a turn-based JRPG that run in the browser, nothing to install, with a phone that follows real-world time and every route and ending checked automatically. Web development taken where it was never meant to go.',
       'The artistic side: a voice before a style. Dark humor that makes you uncomfortable instead of rewarding you, the contrast between a shiny fantasy and a sweaty real life, and the games and music of the 80s, 90s and 2000s as a way of talking about loneliness.',
       'The philosophical side: one question underneath it all. What does a creator owe to what they created? A life on loop, like Sisyphus; creatures who find out their god is just a man; and the freedom you fear right when you finally have it.',
     ],
