@@ -317,3 +317,98 @@ button.tv-rca { padding: 0; border: none; cursor: pointer; }
   .tv-franja:last-child img { animation-delay: -3s; }
 }
 @media (max-width: 700px) and (prefers-reduced-motion: reduce) { .tv-franja img { animation: none; } }
+
+/* ---------- Caja blanca: el juego por dentro ----------
+   Como el mapa de decisiones del juego: cajas oscuras con borde fino, texto mono para lo técnico y los colores de
+   cada personaje para marcar de qué parte se habla (datos dorado, motor azul, interfaz rosa, pruebas verde). */
+.caja { --mono: 'JetBrains Mono', Consolas, monospace; --verde: #3ddc84; --oro: #c9a75e; }
+.cb-ojo { margin: 0 0 0.6rem; color: var(--verde); font: 400 0.85rem var(--mono); }
+.cb-ojo span { color: var(--tenue); }
+.cb-cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: 0.8rem; margin: 2rem 0 0; }
+.cb-cifras div { padding: 0.9rem 1rem; border: 1px solid var(--borde); border-radius: 0.7rem; background: var(--caja); backdrop-filter: blur(6px); }
+.cb-cifras dt { font: 700 1.6rem Montserrat, sans-serif; font-variant-numeric: tabular-nums; color: var(--texto); }
+.cb-cifras dd { margin: 0.1rem 0 0; color: var(--tenue); font-size: 0.85rem; line-height: 1.4; }
+
+.cb-bloque { position: relative; display: grid; gap: 1.4rem; margin-top: clamp(2.5rem, 6vw, 4rem); }
+.cb-dos { grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: start; gap: clamp(1.2rem, 3vw, 2.5rem); }
+.cb-texto { min-width: 0; }
+.cb-texto h3, .cb-subtitulo { margin: 0 0 0.6rem; font: 700 clamp(1.15rem, 3vw, 1.45rem) Montserrat, sans-serif; letter-spacing: 0.02em; text-wrap: balance; }
+.cb-texto p { margin: 0 0 0.8rem; max-width: 40rem; color: #c9ccd4; }
+.cb-subtitulo { margin-top: clamp(3rem, 7vw, 5rem); }
+.cb-columna { display: grid; gap: 1rem; min-width: 0; }
+.cb-mini { display: block; width: 100%; margin-top: 0.6rem; border: 1px solid var(--borde); border-radius: 0.7rem; aspect-ratio: 16 / 9; object-fit: cover; }
+@media (max-width: 900px) { .cb-dos { grid-template-columns: 1fr; } }
+
+/* Los diagramas: SVG que escala con el ancho; en el celular, con un ancho mínimo y desplazamiento de lado. */
+.cb-diagrama { min-width: 0; overflow-x: auto; padding: 1rem; border: 1px solid var(--borde); border-radius: 0.9rem; background: rgba(8, 8, 11, 0.82); }
+.cb-diagrama svg { display: block; width: 100%; height: auto; min-width: 34rem; }
+.cb-mapa svg { min-width: 0; max-width: 36rem; margin: 0 auto; }
+.cb-ciclo svg { min-width: 0; }
+.cb-ciclo { margin-top: 0.6rem; }
+.cb-svg-titulo { font: 700 17px Montserrat, sans-serif; letter-spacing: 0.04em; }
+.cb-svg-item { font: 500 14px Inter, system-ui, sans-serif; fill: #d6d8de; }
+.cb-svg-nodo { font: 600 14px Inter, system-ui, sans-serif; fill: #d6d8de; }
+.cb-svg-nodo.es-decision { fill: #ff9cc3; }
+.cb-svg-salida { font: 500 13px Inter, system-ui, sans-serif; }
+.cb-svg-x { font: 700 12px Inter, sans-serif; fill: #ff4d5e; }
+.cb-svg-pixel { font: 600 15px 'Pixelify Sans', monospace; fill: #e8e2d4; }
+.cb-svg-centro { font: 600 20px 'JetBrains Mono', Consolas, monospace; fill: var(--oro); }
+.cb-leyenda { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin: 0.8rem 0 0; padding: 0; list-style: none; color: var(--tenue); font-size: 0.8rem; }
+.cb-leyenda li { display: flex; align-items: center; gap: 0.4rem; }
+.cb-leyenda i { width: 0.75rem; height: 0.75rem; }
+.l-decision { background: #ff6fa5; rotate: 45deg; scale: 0.85; }
+.l-temprano { border: 1px solid #5a5a66; border-radius: 999px; background: #15151b; }
+.l-bad { border: 1px solid #ff4d5e; border-radius: 999px; background: #2a0c12; }
+.l-pelea { border: 2px solid #f0b54a; border-radius: 3px; }
+
+/* El código: una ventana de editor con los tres puntos y el nombre del archivo. */
+.cb-codigo { min-width: 0; margin: 0; border: 1px solid var(--borde); border-radius: 0.8rem; background: #0a0a0e; overflow: hidden; box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.45); }
+.cb-codigo figcaption { display: flex; align-items: center; gap: 0.4rem; padding: 0.55rem 0.9rem; border-bottom: 1px solid var(--borde); background: #121218; color: var(--tenue); font: 400 0.78rem var(--mono); }
+.cb-codigo figcaption i { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: #ff5f57; }
+.cb-codigo figcaption i:nth-child(2) { background: #febc2e; }
+.cb-codigo figcaption i:nth-child(3) { background: #28c840; }
+.cb-codigo figcaption span { margin-left: 0.5rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cb-codigo pre { margin: 0; padding: 1rem 1.1rem; overflow-x: auto; font: 400 0.8rem/1.6 var(--mono); color: #d6d8de; tab-size: 2; }
+.c-com { color: #6f7685; font-style: italic; }
+.c-clave { color: #8fc8ff; }
+.c-str { color: #f6cf85; }
+.c-kw { color: #ff8fbd; }
+.c-num { color: #8ff0b8; }
+
+/* Los pasos con flechas: en fila si caben; si no, bajan solos. */
+.cb-pasos { display: flex; flex-wrap: wrap; gap: 0.5rem 0.35rem; margin: 0.6rem 0 0; padding: 0; list-style: none; }
+.cb-pasos li { display: flex; align-items: center; gap: 0.35rem; font-size: 0.85rem; }
+.cb-pasos li span { padding: 0.35rem 0.7rem; border: 1px solid rgba(94, 168, 255, 0.45); border-radius: 0.45rem; background: rgba(94, 168, 255, 0.08); color: #d6e6ff; }
+.cb-pasos li:not(:last-child)::after { content: '→'; color: var(--tenue); }
+.cb-pasos-verde li span { border-color: rgba(61, 220, 132, 0.45); background: rgba(61, 220, 132, 0.08); color: #c9f5dc; }
+
+.cb-captura { min-width: 0; margin: 0; }
+.cb-captura img { display: block; width: 100%; border: 1px solid var(--borde); border-radius: 0.8rem; }
+.cb-captura figcaption { margin-top: 0.5rem; color: var(--tenue); font-size: 0.85rem; }
+
+/* Los personajes por dentro: la captura arriba y la ficha abajo, con el color de cada uno. */
+.cb-personajes { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.2rem; margin-top: 1.6rem; }
+.cb-personaje { display: grid; grid-template-rows: auto 1fr; overflow: hidden; border: 1px solid var(--borde); border-top: 3px solid var(--c); border-radius: 0.9rem; background: var(--caja); backdrop-filter: blur(6px); }
+.cb-personaje-captura { position: relative; display: block; aspect-ratio: 16 / 9; overflow: hidden; background: #000; }
+.cb-personaje-captura img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.cb-personaje-captura:hover img { transform: scale(1.05); }
+.cb-personaje-captura span { position: absolute; inset: auto 0 0; padding: 1.2rem 0.8rem 0.5rem; background: linear-gradient(transparent, rgba(0, 0, 0, 0.85)); font: 600 0.78rem Montserrat, sans-serif; }
+.cb-personaje-cuerpo { display: grid; align-content: start; gap: 0.8rem; padding: 0.9rem 1.1rem 1.2rem; }
+.cb-personaje header { display: flex; align-items: center; gap: 0.7rem; }
+.cb-personaje header img { width: 3rem; height: 3rem; object-fit: cover; object-position: top; border-radius: 50%; border: 2px solid var(--c); background: color-mix(in srgb, var(--c) 18%, #000); }
+.cb-personaje h4 { margin: 0; color: var(--c); font: 700 1.2rem Montserrat, sans-serif; letter-spacing: 0.05em; }
+.cb-personaje header small { color: var(--tenue); font-size: 0.8rem; }
+.cb-personaje-cifras { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0; }
+.cb-personaje-cifras div { padding: 0.45rem 0.6rem; border-radius: 0.5rem; background: rgba(255, 255, 255, 0.04); }
+.cb-personaje-cifras dt { font: 700 1.15rem Montserrat, sans-serif; font-variant-numeric: tabular-nums; }
+.cb-personaje-cifras dd { margin: 0; color: var(--tenue); font-size: 0.75rem; line-height: 1.3; }
+.cb-stats { display: grid; gap: 0.3rem; margin: 0; padding: 0; list-style: none; font: 400 0.72rem 'Press Start 2P', monospace; }
+.cb-stats li { display: grid; grid-template-columns: 6.2rem 1fr 1.8rem; align-items: center; gap: 0.5rem; }
+.cb-stats span { color: var(--tenue); font-size: 0.6rem; }
+.cb-stats i { display: block; height: 0.5rem; border: 1px solid rgba(0, 0, 0, 0.8); background: rgba(255, 255, 255, 0.06); }
+.cb-stats i::before { content: ''; display: block; width: var(--v); height: 100%; background: var(--c); }
+.cb-stats b { text-align: right; font-weight: 400; font-variant-numeric: tabular-nums; }
+.cb-movs { margin: 0; color: #d6d8de; font-size: 0.85rem; line-height: 1.5; }
+.cb-movs span { color: var(--tenue); }
+.cb-nota { margin: 0; color: var(--tenue); font-size: 0.88rem; }
+.cb-repo { display: flex; justify-content: center; margin-top: 2.5rem; }

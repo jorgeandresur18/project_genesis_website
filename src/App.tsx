@@ -3,6 +3,8 @@ import { TitleBackground } from './components/TitleBackground';
 import { PeleaEnBucle } from './components/PeleaEnBucle';
 import { Sprite, type Hoja } from './components/Sprite';
 import { Tv } from './components/Tv';
+import { CajaBlanca } from './components/CajaBlanca';
+import { CAJA } from './data/caja_blanca';
 import { DEMO, ENLACES, PAYPAL, PERSONAJES, TEXTOS, type Lang } from './data/textos';
 
 // La animación de reposo de cada uno, recortada de su hoja del juego (public/rpg/<id>.png).
@@ -73,9 +75,9 @@ export function App() {
           <span>PROJECT GENESIS</span>
         </a>
         <nav>
-          {(['proyecto', 'personajes', 'capturas', 'boringram', 'bootcamp', 'rpg', 'autor', 'apoyar'] as const).map((k) => (
+          {(['proyecto', 'personajes', 'capturas', 'boringram', 'bootcamp', 'rpg', 'caja', 'autor', 'apoyar'] as const).map((k) => (
             <a key={k} href={`#${k}`}>
-              {t.nav[k]}
+              {k === 'caja' ? CAJA[lang].nav : t.nav[k]}
             </a>
           ))}
         </nav>
@@ -259,6 +261,9 @@ export function App() {
             <PeleaEnBucle mensajes={t.rpg.mensajes} />
           </Tv>
         </section>
+
+        {/* Caja blanca: el juego por dentro (diagramas, código y los personajes) */}
+        <CajaBlanca lang={lang} />
 
         {/* El autor */}
         <section id="autor" className="seccion">
