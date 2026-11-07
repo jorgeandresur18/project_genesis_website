@@ -152,9 +152,22 @@ export function App() {
             </a>
           </div>
           <p className="hero-nota">{t.hero.gratis}</p>
-          <p className="hero-aviso">
-            <img src="/marca/emblema_18.webp" alt="+18" /> {t.hero.aviso}
-          </p>
+          {/* La advertencia de contenido, con los mismos temas que la del juego (src/data/advertencia.json del juego). */}
+          <aside className="hero-aviso aviso18" aria-label={t.aviso18.titulo}>
+            <img src="/marca/emblema_18.webp" alt="+18" />
+            <div>
+              <b>{t.aviso18.titulo}</b>
+              <p>{t.aviso18.texto}</p>
+              <ul>
+                {t.aviso18.temas.map((tema) => (
+                  <li key={tema.t}>
+                    <strong>{tema.t}:</strong> {tema.d}
+                  </li>
+                ))}
+              </ul>
+              <small>{t.aviso18.ficcion}</small>
+            </div>
+          </aside>
         </section>
 
         {/* El proyecto */}

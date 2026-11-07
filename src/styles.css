@@ -439,3 +439,15 @@ button.tv-rca { padding: 0; border: none; cursor: pointer; }
   .nav nav.abierto a.activo { color: var(--acento); }
   .nav-velo { position: fixed; inset: 0; z-index: 19; background: rgba(0, 0, 0, 0.45); }
 }
+
+/* La advertencia de contenido de la portada: el emblema y, al lado, los temas que trata el juego. */
+.aviso18 { align-items: flex-start; gap: 0.9rem; max-width: 46rem; padding: 0.9rem 1.1rem; font-size: 0.85rem; line-height: 1.5; }
+.aviso18 img { width: 2.6rem; margin-top: 0.1rem; }
+.aviso18 b { display: block; color: #ffd9df; font: 700 0.95rem Montserrat, sans-serif; letter-spacing: 0.04em; }
+.aviso18 p { margin: 0.25rem 0 0.5rem; }
+.aviso18 ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.3rem 1.2rem; margin: 0; padding: 0; list-style: none; }
+.aviso18 li { position: relative; padding-left: 0.9rem; }
+.aviso18 li::before { content: ''; position: absolute; left: 0; top: 0.55em; width: 0.35rem; height: 0.35rem; border-radius: 50%; background: #ff5a6e; }
+.aviso18 strong { color: #ffe3e7; font-weight: 600; }
+.aviso18 small { display: block; margin-top: 0.6rem; color: rgba(255, 195, 204, 0.7); font-size: 0.75rem; }
+@media (max-width: 640px) { .aviso18 ul { grid-template-columns: 1fr; } .aviso18 img { width: 2.1rem; } }

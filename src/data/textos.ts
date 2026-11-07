@@ -25,7 +25,19 @@ const es = {
     jugar: 'Jugar la demo del Capítulo 1',
     conocer: 'Conocer el proyecto',
     gratis: 'Gratis, en el navegador, en español e inglés.',
-    aviso: 'Contenido para adultos (+18): humor negro, groserías e insinuación sexual (siempre con censura).',
+  },
+  aviso18: {
+    titulo: 'Contenido para adultos (+18)',
+    texto: 'PROJECT GENESIS es una obra de ficción para adultos. Trata temas que pueden resultar perturbadores o sensibles para algunas personas:',
+    temas: [
+      { t: 'Manipulación emocional', d: 'codependencia y relaciones disfuncionales.' },
+      { t: 'Alcohol y drogas', d: 'el alcohol con sus consecuencias; las drogas, solo en tono de humor.' },
+      { t: 'Sexualidad sugerida', d: 'insinuaciones y sexualización de personajes, siempre con censura y sin contenido explícito.' },
+      { t: 'Angustia psicológica', d: 'soledad, tragedia existencial y horror psicológico.' },
+      { t: 'Violencia fantástica', d: 'combates y muertes de personajes ficticios.' },
+      { t: 'Lenguaje vulgar', d: 'groserías, insultos y humor negro.' },
+    ],
+    ficcion: 'Todos los personajes y sucesos son ficticios. La interfaz simula fallos y parpadeos de imagen; se pueden reducir en Opciones.',
   },
   proyecto: {
     titulo: 'Una vida en bucle',
@@ -118,7 +130,19 @@ const en: typeof es = {
     jugar: 'Play the Chapter 1 demo',
     conocer: 'About the project',
     gratis: 'Free, in your browser, in Spanish and English.',
-    aviso: 'Adult content (18+): dark humor, swearing and sexual innuendo (always censored).',
+  },
+  aviso18: {
+    titulo: 'Adult content (18+)',
+    texto: 'PROJECT GENESIS is a work of fiction for adults. It deals with themes that some people may find disturbing or sensitive:',
+    temas: [
+      { t: 'Emotional manipulation', d: 'codependency and dysfunctional relationships.' },
+      { t: 'Alcohol and drugs', d: 'alcohol with its consequences; drugs, only played for humor.' },
+      { t: 'Suggested sexuality', d: 'innuendo and sexualization of characters, always censored and with no explicit content.' },
+      { t: 'Psychological distress', d: 'loneliness, existential tragedy and psychological horror.' },
+      { t: 'Fantasy violence', d: 'fights and deaths of fictional characters.' },
+      { t: 'Strong language', d: 'swearing, insults and dark humor.' },
+    ],
+    ficcion: 'All characters and events are fictional. The interface simulates glitches and flickering; you can reduce them in Options.',
   },
   proyecto: {
     titulo: 'A Life on Loop',
