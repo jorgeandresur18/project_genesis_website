@@ -1,4 +1,4 @@
-// «Caja blanca»: cómo está hecho el juego, con diagramas, código real y los personajes por dentro (la demo del
+// «Aspectos técnicos» (antes «Caja blanca»): cómo está hecho el juego, con diagramas, código real y los personajes por dentro (la demo del
 // Capítulo 1). Los textos y las cifras están en src/data/caja_blanca.ts.
 import { type CSSProperties, type ReactNode } from 'react';
 import { CAJA, CODIGO, FICHAS } from '../data/caja_blanca';

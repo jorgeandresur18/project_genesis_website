@@ -25,6 +25,9 @@ const BORINGRAM = ['bor_inicio', 'bor_historia', 'bor_perfil', 'bor_chat'];
 // Lo mismo que el corte de las capturas tomadas en un celular (max-width: 700px).
 const celular = () => window.matchMedia('(max-width: 700px)').matches;
 
+// El enlace de los aspectos técnicos (antes «Caja blanca»).
+const TECNICO = 'aspectos-tecnicos';
+
 function idiomaInicial(): Lang {
   try {
     const guardado = localStorage.getItem('pg-lang');
@@ -47,6 +50,29 @@ export function App() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
   const t = TEXTOS[lang];
+  const [menu, setMenu] = useState(false);
+  useEffect(() => {
+    if (!menu) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenu(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menu]);
+  // Aspectos técnicos: una vista aparte, solo desde su enlace en la barra de arriba (no aparece al recorrer la página).
+  const [tecnico, setTecnico] = useState(() => window.location.hash === `#${TECNICO}`);
+  useEffect(() => {
+    const onHash = () => setTecnico(window.location.hash === `#${TECNICO}`);
+    window.addEventListener('hashchange', onHash);
+    return () => window.removeEventListener('hashchange', onHash);
+  }, []);
+  // Al entrar, arriba del todo; al salir por un enlace de la barra, a la sección que pide (ya visible otra vez).
+  useEffect(() => {
+    if (tecnico) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    const destino = window.location.hash ? document.getElementById(window.location.hash.slice(1)) : null;
+    destino?.scrollIntoView();
+  }, [tecnico]);
 
   useEffect(() => {
     document.documentElement.lang = lang;
@@ -70,13 +96,12 @@ export function App() {
       </div>
 
       <header className="nav">
-        <a href="#inicio" className="nav-marca">
+        <a href="#inicio" className="nav-marca" aria-label="PROJECT GENESIS" title="PROJECT GENESIS">
           <img src="/marca/icono-256.png" alt="" />
-          <span>PROJECT GENESIS</span>
         </a>
-        <nav>
+        <nav id="nav-enlaces" className={menu ? 'abierto' : undefined} onClick={() => setMenu(false)}>
           {(['proyecto', 'personajes', 'capturas', 'boringram', 'bootcamp', 'rpg', 'caja', 'autor', 'apoyar'] as const).map((k) => (
-            <a key={k} href={`#${k}`}>
+            <a key={k} href={`#${k === 'caja' ? TECNICO : k}`} className={k === 'caja' && tecnico ? 'activo' : undefined}>
               {k === 'caja' ? CAJA[lang].nav : t.nav[k]}
             </a>
           ))}
@@ -84,9 +109,35 @@ export function App() {
         <button type="button" className="nav-idioma" onClick={() => setLang(lang === 'es' ? 'en' : 'es')}>
           {t.idioma}
         </button>
+        {/* En el celular los enlaces van en un menú desplegable. */}
+        <button
+          type="button"
+          className={`nav-hamburguesa ${menu ? 'abierto' : ''}`}
+          aria-label={CAJA[lang].menu}
+          aria-expanded={menu}
+          aria-controls="nav-enlaces"
+          onClick={() => setMenu((m) => !m)}
+        >
+          <i />
+          <i />
+          <i />
+        </button>
       </header>
+      {menu && <div className="nav-velo" onClick={() => setMenu(false)} aria-hidden />}
 
       <main>
+        {tecnico && (
+          <div className="tecnico">
+            <p className="tecnico-barra">
+              <a className="boton" href="#inicio">
+                ← {CAJA[lang].volver}
+              </a>
+            </p>
+            <CajaBlanca lang={lang} />
+          </div>
+        )}
+        {/* La página. Mientras se ven los aspectos técnicos queda oculta, sin desmontarse (el televisor no se reinicia). */}
+        <div hidden={tecnico}>
         {/* Portada */}
         <section id="inicio" className="hero">
           <img className="hero-logo" src="/marca/logo.webp" alt="PROJECT GENESIS" />
@@ -262,8 +313,17 @@ export function App() {
           </Tv>
         </section>
 
-        {/* Caja blanca: el juego por dentro (diagramas, código y los personajes) */}
-        <CajaBlanca lang={lang} />
+        {/* Aspectos técnicos: en la página, solo un avance con el botón a la vista aparte. */}
+        <section className="seccion tecnico-avance">
+          <p className="cb-ojo">
+            <span>$</span> git clone project_genesis
+          </p>
+          <h2>{CAJA[lang].avance.titulo}</h2>
+          <p className="seccion-texto">{CAJA[lang].avance.texto}</p>
+          <a className="boton" href={`#${TECNICO}`}>
+            {CAJA[lang].avance.boton} →
+          </a>
+        </section>
 
         {/* El autor */}
         <section id="autor" className="seccion">
@@ -306,6 +366,7 @@ export function App() {
             ▶ {t.hero.jugar}
           </a>
         </section>
+        </div>
       </main>
 
       <footer className="pie">

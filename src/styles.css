@@ -321,7 +321,7 @@ button.tv-rca { padding: 0; border: none; cursor: pointer; }
 /* ---------- Caja blanca: el juego por dentro ----------
    Como el mapa de decisiones del juego: cajas oscuras con borde fino, texto mono para lo técnico y los colores de
    cada personaje para marcar de qué parte se habla (datos dorado, motor azul, interfaz rosa, pruebas verde). */
-.caja { --mono: 'JetBrains Mono', Consolas, monospace; --verde: #3ddc84; --oro: #c9a75e; }
+.caja, .tecnico-avance { --mono: 'JetBrains Mono', Consolas, monospace; --verde: #3ddc84; --oro: #c9a75e; }
 .cb-ojo { margin: 0 0 0.6rem; color: var(--verde); font: 400 0.85rem var(--mono); }
 .cb-ojo span { color: var(--tenue); }
 .cb-cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(10.5rem, 1fr)); gap: 0.8rem; margin: 2rem 0 0; }
@@ -412,3 +412,30 @@ button.tv-rca { padding: 0; border: none; cursor: pointer; }
 .cb-movs span { color: var(--tenue); }
 .cb-nota { margin: 0; color: var(--tenue); font-size: 0.88rem; }
 .cb-repo { display: flex; justify-content: center; margin-top: 2.5rem; }
+
+/* Aspectos técnicos: la vista aparte que se abre desde la barra de arriba. */
+.tecnico { padding-top: 1.5rem; }
+.tecnico-barra { max-width: 76rem; margin: 0 auto; padding: 0 1.25rem; }
+.tecnico .seccion { padding-top: 2rem; }
+.nav nav a.activo { color: var(--texto); }
+
+/* Aspectos técnicos en la página: un avance corto con el botón. */
+.tecnico-avance { padding-top: clamp(2rem, 5vw, 3.5rem); padding-bottom: clamp(2rem, 5vw, 3.5rem); }
+.tecnico-avance h2 { font-size: clamp(1.4rem, 4vw, 2rem); }
+.tecnico-avance .boton { margin-top: 0.5rem; text-align: center; }
+
+/* El menú hamburguesa: solo cuando los enlaces no caben en la barra. */
+.nav-hamburguesa { display: none; }
+@media (max-width: 860px) {
+  .nav-idioma { margin-left: auto; }
+  .nav-hamburguesa { display: grid; align-content: center; gap: 0.3rem; width: 2.5rem; height: 2.3rem; padding: 0 0.55rem; border: 1px solid var(--borde); border-radius: 0.6rem; background: none; cursor: pointer; }
+  .nav-hamburguesa i { display: block; height: 2px; border-radius: 2px; background: var(--texto); transition: transform 0.25s, opacity 0.2s; }
+  .nav-hamburguesa.abierto i:nth-child(1) { transform: translateY(calc(0.3rem + 2px)) rotate(45deg); }
+  .nav-hamburguesa.abierto i:nth-child(2) { opacity: 0; }
+  .nav-hamburguesa.abierto i:nth-child(3) { transform: translateY(calc(-0.3rem - 2px)) rotate(-45deg); }
+  .nav nav.abierto { position: absolute; top: 100%; left: 0; right: 0; display: grid; gap: 0; max-height: calc(100svh - 4rem); overflow-y: auto; padding: 0.4rem clamp(1rem, 4vw, 2.5rem) 0.8rem; background: rgba(5, 5, 7, 0.96); backdrop-filter: blur(10px); border-bottom: 1px solid var(--borde); box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.6); }
+  .nav nav.abierto a { padding: 0.75rem 0.2rem; border-bottom: 1px solid rgba(214, 218, 226, 0.08); color: var(--texto); font-size: 1rem; }
+  .nav nav.abierto a:last-child { border-bottom: none; }
+  .nav nav.abierto a.activo { color: var(--acento); }
+  .nav-velo { position: fixed; inset: 0; z-index: 19; background: rgba(0, 0, 0, 0.45); }
+}
